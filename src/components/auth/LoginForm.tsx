@@ -30,7 +30,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 interface JwtPayload {
   userId?: string;
   email?: string;
-  role?: "USER" | "ADMIN";
+  role?: string;
   iat?: number;
   exp?: number;
 }
@@ -255,10 +255,15 @@ export default function LoginForm() {
         const decoded = jwtDecode<JwtPayload>(accessToken);
         const role = decoded?.role || user?.role;
 
+        const getRoleLabel = (r?: string) => {
+          if (r === "SUPER_ADMIN") return "Super Admin";
+          if (r === "ORGANIZATION_ADMIN") return "Organization Admin";
+          if (r === "DEPARTMENT_ADMIN") return "Department Admin";
+          return "User";
+        };
+
         toast.success(`Welcome back, ${user?.name || "User"}!`, {
-          description: `Logged in as ${
-            role === "ADMIN" ? "Administrator" : "User"
-          }`,
+          description: `Logged in as ${getRoleLabel(role)}`,
         });
 
         reset();
@@ -267,19 +272,27 @@ export default function LoginForm() {
         const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
         if (redirectUrl) {
           sessionStorage.removeItem("redirectAfterLogin");
-          router.push(redirectUrl);
+          window.location.href = redirectUrl;
           return;
         }
 
-        if (role === "ADMIN") {
-          router.push("/");
+        const currentOrigin = typeof window !== "undefined" ? window.location.origin : "";
+        const dashboardBaseUrl = currentOrigin.includes("localhost")
+          ? "http://localhost:3010"
+          : "https://dashboard.greetely.com";
+
+        let dashboardPath = "/";
+        if (role === "SUPER_ADMIN") {
+          dashboardPath = "/super-admin";
+        } else if (role === "ORGANIZATION_ADMIN") {
+          dashboardPath = "/org-admin";
+        } else if (role === "DEPARTMENT_ADMIN") {
+          dashboardPath = "/dept-admin/dashboard";
         } else if (role === "USER") {
-          router.push("/");
-        } else {
-          router.push("/");
+          dashboardPath = "/user/dashboard";
         }
 
-        router.refresh();
+        window.location.href = `${dashboardBaseUrl}${dashboardPath}`;
       } else {
         toast.error("Login failed", {
           description: "Invalid email or password",
