@@ -156,9 +156,9 @@
 
 // headers.set("Authorization", `${token}`);
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { logout } from "../features/authSlice";
+import { logout, setUser } from "../features/authSlice";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 if (!baseUrl) {
@@ -176,20 +176,55 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithAuth: ReturnType<typeof fetchBaseQuery> = async (
-  args,
-  api,
-  extraOptions,
-) => {
-  const result = await rawBaseQuery(args, api, extraOptions);
+const baseQueryWithRefreshToken: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await rawBaseQuery(args, api, extraOptions);
 
   if (
     result.error &&
     (result.error.status === 401 || result.error.status === 403)
   ) {
-    api.dispatch(logout());
     if (typeof window !== "undefined") {
-      console.warn("API returned 401/403; dispatched logout().");
+      console.warn("API returned 401/403. Attempting to refresh token...");
+    }
+
+    try {
+      const refreshResult = await fetch(
+        `${baseUrl}/auth/refresh-token`,
+        { method: "POST", credentials: "include" }
+      );
+
+      if (refreshResult.ok) {
+        const refreshResponse = await refreshResult.json();
+        const newAccessToken = refreshResponse?.data?.accessToken;
+
+        if (newAccessToken) {
+          if (typeof window !== "undefined") {
+            console.log("Token refreshed successfully.");
+          }
+          api.dispatch(setUser({ token: newAccessToken }));
+          // Retry the original query with the new access token
+          result = await rawBaseQuery(args, api, extraOptions);
+        } else {
+          if (typeof window !== "undefined") {
+            console.warn("No access token in refresh response. Logging out...");
+          }
+          api.dispatch(logout());
+        }
+      } else {
+        if (typeof window !== "undefined") {
+          console.warn("Refresh token request failed. Logging out...");
+        }
+        api.dispatch(logout());
+      }
+    } catch (err) {
+      if (typeof window !== "undefined") {
+        console.error("Token refresh failed with exception. Logging out...", err);
+      }
+      api.dispatch(logout());
     }
   }
 
@@ -198,7 +233,7 @@ const baseQueryWithAuth: ReturnType<typeof fetchBaseQuery> = async (
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: baseQueryWithAuth,
+  baseQuery: baseQueryWithRefreshToken,
   tagTypes: [
     "User",
     "Products",
