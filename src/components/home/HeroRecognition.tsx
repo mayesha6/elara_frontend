@@ -1,8 +1,13 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import HeroImage from "@/assets/images/w1.png";
+import AccountTypeModal from "@/components/common/AccountTypeModal";
 
 export default function HeroRecognition() {
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+
   return (
     <section className="w-full bg-[#FB741F] overflow-hidden">
       <div className="container mx-auto flex items-center px-6 pt-12 md:px-10  lg:px-16">
@@ -33,11 +38,19 @@ export default function HeroRecognition() {
             </p>
 
             <div className="mt-10">
-              <button className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-4 text-sm font-medium text-[#FB741F] shadow-sm transition hover:scale-[1.02] hover:shadow-md">
-                Create Organization Account
+              <button
+                onClick={() => setIsAccountModalOpen(true)}
+                className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-4 text-sm font-medium text-[#FB741F] shadow-sm transition hover:scale-[1.02] hover:shadow-md"
+              >
+                Create Account
                 <ArrowUpRight className="h-4 w-4" />
               </button>
             </div>
+
+            <AccountTypeModal
+              isOpen={isAccountModalOpen}
+              onClose={() => setIsAccountModalOpen(false)}
+            />
           </div>
         </div>
       </div>

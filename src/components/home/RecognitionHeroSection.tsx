@@ -1,7 +1,10 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import ContainerImg from '@/assets/images/Container.png';
+import ContainerImg from "@/assets/images/Container.png";
 import { FaCircleCheck } from "react-icons/fa6";
+import AccountTypeModal from "@/components/common/AccountTypeModal";
 
 const features = [
   "Real-time dashboard with key metrics",
@@ -11,6 +14,8 @@ const features = [
 ];
 
 export default function RecognitionHeroSection() {
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+
   return (
     <section className="w-full bg-gradient-to-t from-[#f0f7ff] to-white">
       <div className="mx-auto grid min-h-[420px] max-w-7xl grid-cols-1 items-center gap-10 px-6 py-12 md:px-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:px-16 lg:py-16">
@@ -51,11 +56,17 @@ export default function RecognitionHeroSection() {
 
           <button
             type="button"
+            onClick={() => setIsAccountModalOpen(true)}
             className="mt-8 inline-flex items-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-semibold text-[#ff7a1a] shadow-sm ring-1 ring-[#f4ded0] transition hover:shadow-md"
           >
-            Create Organization Account
+            Create Account
             <ArrowUpRight className="h-4 w-4" />
           </button>
+
+          <AccountTypeModal
+            isOpen={isAccountModalOpen}
+            onClose={() => setIsAccountModalOpen(false)}
+          />
         </div>
       </div>
     </section>

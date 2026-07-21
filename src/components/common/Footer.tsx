@@ -1,4 +1,8 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
 import { ArrowUpRight, Facebook, Linkedin, Twitter } from "lucide-react";
+import AccountTypeModal from "@/components/common/AccountTypeModal";
 
 const productLinks = [
   "Home",
@@ -12,6 +16,8 @@ const productLinks = [
 const legalLinks = ["Privacy Policy", "Terms of Service"];
 
 export default function Footer() {
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+
   return (
     <footer className="bg-[#ff741d] text-white">
       <div className="container mx-auto px-5 pb-0 pt-12 sm:px-8 sm:pt-14 lg:px-10 lg:pt-[58px]">
@@ -28,20 +34,26 @@ export default function Footer() {
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <button
                 type="button"
+                onClick={() => setIsAccountModalOpen(true)}
                 className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-[#ff741d] shadow-sm transition hover:translate-y-[-1px]"
               >
-                Create Organization Account
+                Create Account
                 <ArrowUpRight className="h-4 w-4" />
               </button>
 
-              <button
-                type="button"
+              <Link
+                href="/login"
                 className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-[#ff741d] shadow-sm transition hover:translate-y-[-1px]"
               >
-                Create Individual Account
+                Sign in to Greetely
                 <ArrowUpRight className="h-4 w-4" />
-              </button>
+              </Link>
             </div>
+
+            <AccountTypeModal
+              isOpen={isAccountModalOpen}
+              onClose={() => setIsAccountModalOpen(false)}
+            />
           </div>
 
           <div>

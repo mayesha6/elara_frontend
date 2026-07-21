@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import Cookies from "js-cookie";
@@ -7,8 +8,10 @@ import Cookies from "js-cookie";
 import heroImg from "@/assets/images/hero.png";
 
 import Link from "next/link";
+import AccountTypeModal from "@/components/common/AccountTypeModal";
 
 const HeroSection = () => {
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const tokenKeep = Cookies.get("accessToken");
 
   const domain = typeof window !== "undefined" ? window.location.origin : "";
@@ -57,25 +60,30 @@ const HeroSection = () => {
             ) : (
               <>
                 {/* Primary — orange filled */}
-                <Link
-                  href={"/register?name=ORGANIZATION"}
-                  className="w-full lg:w-auto flex items-center gap-2 bg-primary hover:bg-primary active:scale-95 text-white font-semibold text-sm px-6 py-4 rounded-lg transition-all duration-200 shadow-sm"
+                <button
+                  onClick={() => setIsAccountModalOpen(true)}
+                  className="w-full lg:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 active:scale-95 text-white font-semibold text-sm px-6 py-4 rounded-lg transition-all duration-200 shadow-sm"
                 >
-                  Create Organization Account
+                  Create Account
                   <ArrowUpRight size={16} strokeWidth={2.5} />
-                </Link>
+                </button>
 
                 {/* Secondary — orange outlined */}
                 <Link
-                  href={"/register"}
-                  className="w-full lg:w-auto flex items-center gap-2 border border-primary text-primary hover:bg-[#fff4ee] active:scale-95 font-semibold text-sm px-6 py-4 rounded-lg transition-all duration-200 bg-white shadow-sm"
+                  href={"/login"}
+                  className="w-full lg:w-auto flex items-center justify-center gap-2 border border-primary text-primary hover:bg-[#fff4ee] active:scale-95 font-semibold text-sm px-6 py-4 rounded-lg transition-all duration-200 bg-white shadow-sm"
                 >
-                  Create Individual Account
+                  Sign in to Greetely
                   <ArrowUpRight size={16} strokeWidth={2.5} />
                 </Link>
               </>
             )}
           </div>
+
+          <AccountTypeModal
+            isOpen={isAccountModalOpen}
+            onClose={() => setIsAccountModalOpen(false)}
+          />
 
           {/* Trust line */}
           <p className="text-[#999] text-sm">
