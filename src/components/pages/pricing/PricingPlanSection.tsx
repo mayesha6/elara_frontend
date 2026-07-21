@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { useAppSelector } from "@/redux/hooks";
@@ -98,22 +99,20 @@ export default function PricingPlanSection() {
               <button
                 type="button"
                 onClick={() => setActiveTab("individual")}
-                className={`relative rounded-full px-6 py-2 text-sm font-medium transition-all duration-300 ${
-                  activeTab === "individual"
+                className={`relative rounded-full px-6 py-2 text-sm font-medium transition-all duration-300 ${activeTab === "individual"
                     ? "bg-[#0b3c5d] text-white shadow"
                     : "text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 For Individuals
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab("organization")}
-                className={`relative rounded-full px-6 py-2 text-sm font-medium transition-all duration-300 ${
-                  activeTab === "organization"
+                className={`relative rounded-full px-6 py-2 text-sm font-medium transition-all duration-300 ${activeTab === "organization"
                     ? "bg-[#0b3c5d] text-white shadow"
                     : "text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 For Organizations
               </button>
@@ -135,11 +134,10 @@ export default function PricingPlanSection() {
               return (
                 <div
                   key={plan._id}
-                  className={`rounded-2xl p-6 shadow-sm border transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between ${
-                    active 
-                      ? "bg-blue-50/50 border-[#0b3c5d]/30" 
+                  className={`rounded-2xl p-6 shadow-sm border transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between ${active
+                      ? "bg-blue-50/50 border-[#0b3c5d]/30"
                       : "bg-[#eff6ff] border-gray-100"
-                  }`}
+                    }`}
                 >
                   <div>
                     <div className="flex justify-between items-start">
@@ -165,7 +163,7 @@ export default function PricingPlanSection() {
 
                     <div className="mt-5 rounded-xl bg-white px-4 py-5 border border-gray-100">
                       <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Core Access</p>
-                      
+
                       {plan.userLimit > 1 && (
                         <p className="text-xs font-medium text-indigo-600 mb-3 bg-indigo-50/80 px-2.5 py-1 rounded-lg inline-block">
                           Up to {plan.userLimit} Users included
@@ -192,13 +190,12 @@ export default function PricingPlanSection() {
                     type="button"
                     disabled={active || isSubscribing}
                     onClick={() => handleSubscribe(plan)}
-                    className={`mt-6 inline-flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                      active
+                    className={`mt-6 inline-flex w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 ${active
                         ? "bg-gray-200 text-gray-500 cursor-default"
                         : isSubscribing
                           ? "bg-indigo-400 text-white cursor-wait"
                           : "bg-[#0b3c5d] hover:bg-[#082a42] text-white focus:ring-[#0b3c5d]"
-                    }`}
+                      }`}
                   >
                     {isSubscribing ? (
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
