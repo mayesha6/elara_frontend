@@ -361,7 +361,7 @@ export default function RegisterForm() {
         name: data.fullName,
         email: data.email,
         password: data.password,
-        department: data.department,
+        department: name === "ORGANIZATION" ? "Organization" : data.department,
         accountType: name === "ORGANIZATION" ? "ORGANIZATION" : "INDIVIDUAL",
       };
 
@@ -475,33 +475,35 @@ export default function RegisterForm() {
               </div>
 
               {/* ✅ Department Field - From API with Personal Account default */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Department
-                </label>
-                <select
-                  {...register("department")}
-                  disabled={isDepartmentLoading}
-                  defaultValue="Personal Account"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition bg-white text-gray-900 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <option value="">
-                    {isDepartmentLoading
-                      ? "Loading departments..."
-                      : "Personal Account"}
-                  </option>
-                  {departments.map((dept) => (
-                    <option key={dept._id} value={dept.name}>
-                      {dept.name}
+              {name !== "ORGANIZATION" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Department
+                  </label>
+                  <select
+                    {...register("department")}
+                    disabled={isDepartmentLoading}
+                    defaultValue="Personal Account"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition bg-white text-gray-900 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <option value="">
+                      {isDepartmentLoading
+                        ? "Loading departments..."
+                        : "Personal Account"}
                     </option>
-                  ))}
-                </select>
-                {errors.department && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.department.message}
-                  </p>
-                )}
-              </div>
+                    {departments.map((dept) => (
+                      <option key={dept._id} value={dept.name}>
+                        {dept.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.department && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.department.message}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Password Field */}
               <div>
