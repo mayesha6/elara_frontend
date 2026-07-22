@@ -123,7 +123,7 @@ export default function Navbar() {
 
   const userLinks = [
     {
-      name: "Send Recognition",
+      name: "Dashboard",
       href:
         domain === "http://localhost:3041"
           ? "http://localhost:3010/user"
