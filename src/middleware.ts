@@ -57,6 +57,8 @@ export function middleware(request: NextRequest) {
     "/testimonials",
     "/register",
     "/otp-verify",
+    "/success",
+    "/cancel",
   ];
 
   const isPublicRoute = publicRoutes.some(

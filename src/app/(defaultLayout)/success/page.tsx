@@ -34,7 +34,15 @@ export default function SuccessPage() {
 
         <div className="pt-4 space-y-3">
           <button
-            onClick={() => router.push("/user")}
+            onClick={() => {
+              let dashboardUrl = "https://dashboard.greetely.com";
+              if (typeof window !== "undefined") {
+                if (window.location.hostname.includes("localhost")) {
+                  dashboardUrl = "http://localhost:3010";
+                }
+              }
+              window.location.href = dashboardUrl;
+            }}
             className="w-full flex items-center justify-center gap-2 bg-[#0b3c5d] hover:bg-[#082a42] text-white py-3 rounded-xl font-semibold transition-colors"
           >
             Go to Dashboard <ArrowRight size={16} />
