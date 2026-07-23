@@ -110,37 +110,31 @@ export default function Navbar() {
 
   const isSuperAdmin = user?.role === "SUPER_ADMIN";
 
-  const superAdminLinks = [
-    {
-      name: "Admin Dashboard",
-      href:
-        domain === "http://localhost:3041"
-          ? "http://localhost:3010/super-admin"
-          : "https://dashboard.greetely.com/super-admin",
-      icon: LayoutDashboard,
-    },
-  ];
+  const getDashboardHref = (role?: string) => {
+    let prefix = "user";
+    if (role === "SUPER_ADMIN") prefix = "super-admin";
+    else if (role === "ORGANIZATION_ADMIN") prefix = "org-admin";
+    else if (role === "DEPARTMENT_ADMIN") prefix = "dept-admin";
 
-  const userLinks = [
-    {
-      name: "Dashboard",
-      href:
-        domain === "http://localhost:3041"
-          ? "http://localhost:3010/user"
-          : "https://dashboard.greetely.com/user",
-      icon: LayoutDashboard,
+    let dashboardBaseUrl = "https://dashboard.greetely.com";
+    if (domain === "http://localhost:3041") {
+      dashboardBaseUrl = "http://localhost:3010";
     }
-  ];
+    return `${dashboardBaseUrl}/${prefix}`;
+  };
 
   const getRoleLabel = (role?: string) => {
     if (role === "SUPER_ADMIN") return "Super Admin";
-    if (role === "ADMIN") return "Administrator";
+    if (role === "ORGANIZATION_ADMIN") return "Org Admin";
+    if (role === "DEPARTMENT_ADMIN") return "Dept Admin";
+    if (role === "EMPLOYEE") return "Employee";
     return "User";
   };
 
   const getRoleBadgeClass = (role?: string) => {
-    if (role === "SUPER_ADMIN" || role === "ADMIN")
-      return "bg-purple-100 text-purple-700";
+    if (role === "SUPER_ADMIN") return "bg-purple-100 text-purple-700";
+    if (role === "ORGANIZATION_ADMIN") return "bg-indigo-100 text-indigo-700";
+    if (role === "DEPARTMENT_ADMIN") return "bg-amber-100 text-amber-700";
     return "bg-blue-100 text-blue-700";
   };
 
@@ -244,57 +238,37 @@ export default function Navbar() {
                     </div>
 
                     <div className="py-2">
-                      {isSuperAdmin
-                        ? superAdminLinks.map((link, index) => {
-                          const Icon = link.icon;
-                          const isActive = pathname === link.href;
-                          return (
-                            <Link
-                              key={index}
-                              href={link.href}
-                              onClick={() => setIsDropdownOpen(false)}
-                              className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${isActive
-                                ? "bg-orange-50 text-orange-600 font-medium"
-                                : "text-gray-700 hover:bg-gray-50"
-                                }`}
-                            >
-                              <Icon
-                                size={18}
-                                className={
-                                  isActive
-                                    ? "text-orange-500"
-                                    : "text-gray-400"
-                                }
-                              />
-                              <span>{link.name}</span>
-                            </Link>
-                          );
-                        })
-                        : userLinks.map((link, index) => {
-                          const Icon = link.icon;
-                          const isActive = pathname === link.href;
-                          return (
-                            <Link
-                              key={index}
-                              href={link.href}
-                              onClick={() => setIsDropdownOpen(false)}
-                              className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${isActive
-                                ? "bg-orange-50 text-orange-600 font-medium"
-                                : "text-gray-700 hover:bg-gray-50"
-                                }`}
-                            >
-                              <Icon
-                                size={18}
-                                className={
-                                  isActive
-                                    ? "text-orange-500"
-                                    : "text-gray-400"
-                                }
-                              />
-                              <span>{link.name}</span>
-                            </Link>
-                          );
-                        })}
+                      {[
+                        {
+                          name: isSuperAdmin ? "Admin Dashboard" : "Dashboard",
+                          href: getDashboardHref(user?.role),
+                          icon: LayoutDashboard,
+                        }
+                      ].map((link, index) => {
+                        const Icon = link.icon;
+                        const isActive = pathname === link.href;
+                        return (
+                          <Link
+                            key={index}
+                            href={link.href}
+                            onClick={() => setIsDropdownOpen(false)}
+                            className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${isActive
+                              ? "bg-orange-50 text-orange-600 font-medium"
+                              : "text-gray-700 hover:bg-gray-50"
+                              }`}
+                          >
+                            <Icon
+                              size={18}
+                              className={
+                                isActive
+                                  ? "text-orange-500"
+                                  : "text-gray-400"
+                              }
+                            />
+                            <span>{link.name}</span>
+                          </Link>
+                        );
+                      })}
                     </div>
 
                     <div className="border-t border-gray-100 my-1"></div>
