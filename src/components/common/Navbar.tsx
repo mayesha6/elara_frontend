@@ -403,43 +403,30 @@ export default function Navbar() {
               </div>
             </div>
 
-            {isSuperAdmin
-              ? superAdminLinks.map((link, index) => {
-                const Icon = link.icon;
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={index}
-                    href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`flex items-center gap-3 px-6 py-4 text-sm font-medium border-b border-gray-100 transition-colors duration-200 ${isActive
-                      ? "text-orange-500 bg-orange-50"
-                      : "text-gray-600 hover:text-orange-500 hover:bg-orange-50"
-                      }`}
-                  >
-                    <Icon size={18} />
-                    <span>{link.name}</span>
-                  </Link>
-                );
-              })
-              : userLinks.map((link, index) => {
-                const Icon = link.icon;
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={index}
-                    href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`flex items-center gap-3 px-6 py-4 text-sm font-medium border-b border-gray-100 transition-colors duration-200 ${isActive
-                      ? "text-orange-500 bg-orange-50"
-                      : "text-gray-600 hover:text-orange-500 hover:bg-orange-50"
-                      }`}
-                  >
-                    <Icon size={18} />
-                    <span>{link.name}</span>
-                  </Link>
-                );
-              })}
+            {[
+              {
+                name: isSuperAdmin ? "Admin Dashboard" : "Dashboard",
+                href: getDashboardHref(user?.role),
+                icon: LayoutDashboard,
+              }
+            ].map((link, index) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={index}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center gap-3 px-6 py-4 text-sm font-medium border-b border-gray-100 transition-colors duration-200 ${isActive
+                    ? "text-orange-500 bg-orange-50"
+                    : "text-gray-600 hover:text-orange-500 hover:bg-orange-50"
+                    }`}
+                >
+                  <Icon size={18} />
+                  <span>{link.name}</span>
+                </Link>
+              );
+            })}
 
             <button
               onClick={() => {
