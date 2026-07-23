@@ -62,8 +62,9 @@ export default function PricingPlanSection() {
     try {
       setSubscribingId(plan._id);
       const res = await createCheckoutSession({ planId: plan._id }).unwrap();
-      if (res?.data?.checkoutUrl) {
-        window.location.href = res.data.checkoutUrl;
+      const checkoutUrl = res?.checkoutUrl || res?.data?.checkoutUrl;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
       } else {
         toast.error("Failed to generate checkout session.");
       }
