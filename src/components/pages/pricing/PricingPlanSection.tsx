@@ -40,6 +40,13 @@ export default function PricingPlanSection() {
   const [activeTab, setActiveTab] = useState<"individual" | "organization">("individual");
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
 
+  // Automatically switch tab to organization if the logged-in user is an Organization Admin
+  useEffect(() => {
+    if (user && user.role === "ORGANIZATION_ADMIN") {
+      setActiveTab("organization");
+    }
+  }, [user]);
+
   const handleSubscribe = async (plan: any) => {
     if (!token) {
       toast.error("Please login to purchase a subscription.");
