@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useGetMeQuery } from "@/redux/api/authApi";
 import {
   useGetPlansListQuery,
@@ -10,10 +10,27 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { setUser } from "@/redux/features/authSlice";
 
 export default function PricingPlanSection() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.auth.token);
+
+  // Auto-login if token is passed in query parameters (useful for local dev and redirects)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlToken = urlParams.get("token");
+      if (urlToken) {
+        dispatch(setUser({ token: urlToken }));
+        // Clean up the token query param from URL
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, "", cleanUrl);
+      }
+    }
+  }, [dispatch]);
+
   const { data: meRes } = useGetMeQuery(undefined, { skip: !token });
   const user = meRes?.data;
 
