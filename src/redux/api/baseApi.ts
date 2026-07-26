@@ -159,6 +159,7 @@
 import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { logout, setUser } from "../features/authSlice";
+import Cookies from "js-cookie";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 if (!baseUrl) {
@@ -192,9 +193,18 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     }
 
     try {
+      const refreshTokenVal = Cookies.get("refreshToken") || (api.getState() as RootState).auth?.refresh_token;
+
       const refreshResult = await fetch(
         `${baseUrl}/auth/refresh-token`,
-        { method: "POST", credentials: "include" }
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refreshToken: refreshTokenVal }),
+          credentials: "include",
+        }
       );
 
       if (refreshResult.ok) {
