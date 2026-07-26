@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { setUser } from "@/redux/features/authSlice";
+import { setUser, setRefreshToken } from "@/redux/features/authSlice";
 
 export default function PricingPlanSection() {
   const router = useRouter();
@@ -22,8 +22,12 @@ export default function PricingPlanSection() {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const urlToken = urlParams.get("token");
+      const urlRefreshToken = urlParams.get("refreshToken");
       if (urlToken) {
         dispatch(setUser({ token: urlToken }));
+        if (urlRefreshToken) {
+          dispatch(setRefreshToken({ refresh_token: urlRefreshToken }));
+        }
         // Clean up the token query param from URL
         const cleanUrl = window.location.pathname;
         window.history.replaceState({}, "", cleanUrl);
