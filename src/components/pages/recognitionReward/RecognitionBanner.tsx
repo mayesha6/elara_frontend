@@ -95,6 +95,7 @@ import { useState } from "react";
 import { Button } from "../../ui/button";
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const LOGIN_URL = "/login"; // ← your login route
 
@@ -167,10 +168,24 @@ const RecognitionBanner = () => {
 
   const handleSendRecognition = () => {
     if (tokenKeep) {
-      window.location.href =
+      let prefix = "user/dashboard";
+      try {
+        const decoded = jwtDecode<{ role?: string }>(tokenKeep);
+        const role = decoded?.role;
+        if (role === "SUPER_ADMIN") prefix = "super-admin";
+        else if (role === "ORGANIZATION_ADMIN") prefix = "org-admin";
+        else if (role === "DEPARTMENT_ADMIN") prefix = "dept-admin/dashboard";
+        else if (role === "USER") prefix = "user/dashboard";
+      } catch (err) {
+        console.error("Token decoding failed", err);
+      }
+
+      const dashboardBaseUrl =
         domain === "http://localhost:3041"
-          ? "http://localhost:3010/user"
-          : "https://dashboard.greetely.com/user";
+          ? "http://localhost:3010"
+          : "https://dashboard.greetely.com";
+
+      window.location.href = `${dashboardBaseUrl}/${prefix}`;
     } else {
       setShowModal(true); // ← this will now actually fire
     }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 // 👇 Update this path to match your actual image file
 import heroImg from "@/assets/images/hero.png";
@@ -18,10 +19,24 @@ const HeroSection = () => {
 
   const handleSendRecognition = () => {
     if (tokenKeep) {
-      window.location.href =
+      let prefix = "user/dashboard";
+      try {
+        const decoded = jwtDecode<{ role?: string }>(tokenKeep);
+        const role = decoded?.role;
+        if (role === "SUPER_ADMIN") prefix = "super-admin";
+        else if (role === "ORGANIZATION_ADMIN") prefix = "org-admin";
+        else if (role === "DEPARTMENT_ADMIN") prefix = "dept-admin/dashboard";
+        else if (role === "USER") prefix = "user/dashboard";
+      } catch (err) {
+        console.error("Token decoding failed", err);
+      }
+
+      const dashboardBaseUrl =
         domain === "http://localhost:3041"
-          ? "http://localhost:3010/user"
-          : "https://dashboard.greetely.com/user";
+          ? "http://localhost:3010"
+          : "https://dashboard.greetely.com";
+
+      window.location.href = `${dashboardBaseUrl}/${prefix}`;
     }
   };
   return (
@@ -53,7 +68,7 @@ const HeroSection = () => {
                   onClick={handleSendRecognition}
                   className="w-full lg:w-auto flex items-center gap-2 bg-primary hover:bg-primary active:scale-95 text-white font-semibold text-sm px-6 py-4 rounded-lg transition-all duration-200 shadow-sm"
                 >
-                  Send Recognation
+                  Open Workspace
                   <ArrowUpRight size={16} strokeWidth={2.5} />
                 </button>
               </>
