@@ -269,7 +269,7 @@ export default function VerifyOTPPage() {
 
   const [otpRefs] = useState<(HTMLInputElement | null)[]>([]);
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
-  const [countdown, setCountdown] = useState(0);
+  const [countdown, setCountdown] = useState(120);
 
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
   const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
@@ -382,7 +382,7 @@ export default function VerifyOTPPage() {
     try {
       const response = await resendOtp({ email }).unwrap();
       toast.success(response?.message || "OTP resent successfully");
-      setCountdown(60);
+      setCountdown(120);
       setOtpValues(["", "", "", "", "", ""]);
       setValue("otp", "");
       otpRefs[0]?.focus();

@@ -170,7 +170,7 @@ export default function ForgetPasswordPage() {
       await forgotPassword({ email: normalizedEmail }).unwrap();
 
       setStep("otp");
-      setCountdown(60);
+      setCountdown(120);
       toast.success("Reset code sent to your email");
     } catch (error: any) {
       console.error("Failed to send reset email:", error);
@@ -230,7 +230,7 @@ export default function ForgetPasswordPage() {
       await forgotPassword({ email }).unwrap();
       setOtpValues(["", "", "", "", "", ""]);
       otpForm.reset({ otp: "" });
-      setCountdown(60);
+      setCountdown(120);
       otpRefs[0]?.focus();
       toast.success("A new OTP has been sent. Please use the latest code.");
     } catch (error: any) {
