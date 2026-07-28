@@ -81,9 +81,12 @@ export default function Navbar() {
         domain: isProduction ? ".greetely.com" : undefined,
         secure: isProduction,
         sameSite: isProduction ? ("None" as const) : ("Lax" as const),
+        path: "/",
       };
       Cookies.remove("accessToken", cookieOptions);
       Cookies.remove("refreshToken", cookieOptions);
+      Cookies.remove("accessToken", { path: "/" });
+      Cookies.remove("refreshToken", { path: "/" });
 
       dispatch(logout());
       await persistor.purge();
