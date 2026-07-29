@@ -113,11 +113,32 @@ export default function Navbar() {
 
   const isSuperAdmin = user?.role === "SUPER_ADMIN";
 
+  const slugify = (text: string): string => {
+    return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+      .replace(/\-\-+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, ""); // Trim - from end of text
+  };
+
   const getDashboardHref = (role?: string) => {
-    let prefix = "user";
-    if (role === "SUPER_ADMIN") prefix = "super-admin";
-    else if (role === "ORGANIZATION_ADMIN") prefix = "org-admin";
-    else if (role === "DEPARTMENT_ADMIN") prefix = "dept-admin";
+    let prefix = "user/dashboard";
+    if (role === "SUPER_ADMIN") {
+      prefix = "super-admin";
+    } else if (role === "ORGANIZATION_ADMIN") {
+      const orgName = user?.name || "org-admin";
+      prefix = slugify(orgName);
+    } else if (role === "DEPARTMENT_ADMIN") {
+      const orgObj = user?.organizationId;
+      const orgName = orgObj?.name || (typeof orgObj === "string" ? orgObj : "dept-admin");
+      prefix = `${slugify(orgName)}/dept-admin/dashboard`;
+    } else if (role === "USER") {
+      prefix = "user/dashboard";
+    }
 
     let dashboardBaseUrl = "https://dashboard.greetely.com";
     if (domain === "http://localhost:3041") {

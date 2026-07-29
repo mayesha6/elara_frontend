@@ -166,16 +166,47 @@ const RecognitionBanner = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const slugify = (text: string): string => {
+    return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+      .replace(/\-\-+/g, "-") // Replace multiple - with single -
+      .replace(/^-+/, "") // Trim - from start of text
+      .replace(/-+$/, ""); // Trim - from end of text
+  };
+
   const handleSendRecognition = () => {
     if (tokenKeep) {
       let prefix = "user/dashboard";
       try {
         const decoded = jwtDecode<{ role?: string }>(tokenKeep);
         const role = decoded?.role;
+
+        let orgName = "";
+        try {
+          const storedUser = localStorage.getItem("user");
+          if (storedUser) {
+            const parsed = JSON.parse(storedUser);
+            if (role === "ORGANIZATION_ADMIN") {
+              orgName = parsed.name || "";
+            } else if (role === "DEPARTMENT_ADMIN") {
+              const orgObj = parsed.organizationId;
+              orgName = orgObj?.name || (typeof orgObj === "string" ? orgObj : "");
+            }
+          }
+        } catch (e) {
+          console.error("Failed to parse user from localStorage:", e);
+        }
+
         if (role === "SUPER_ADMIN") prefix = "super-admin";
-        else if (role === "ORGANIZATION_ADMIN") prefix = "org-admin";
-        else if (role === "DEPARTMENT_ADMIN") prefix = "dept-admin/dashboard";
-        else if (role === "USER") prefix = "user/dashboard";
+        else if (role === "ORGANIZATION_ADMIN") {
+          prefix = orgName ? slugify(orgName) : "org-admin";
+        } else if (role === "DEPARTMENT_ADMIN") {
+          prefix = orgName ? `${slugify(orgName)}/dept-admin/dashboard` : "dept-admin/dashboard";
+        } else if (role === "USER") prefix = "user/dashboard";
       } catch (err) {
         console.error("Token decoding failed", err);
       }

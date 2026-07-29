@@ -301,7 +301,9 @@ export default function LoginForm() {
           const orgName = user?.name || "org-admin";
           dashboardPath = `/${slugify(orgName)}`;
         } else if (role === "DEPARTMENT_ADMIN") {
-          dashboardPath = "/dept-admin/dashboard";
+          const orgObj = user?.organizationId;
+          const orgName = orgObj?.name || (typeof orgObj === "string" ? orgObj : "dept-admin");
+          dashboardPath = `/${slugify(orgName)}/dept-admin/dashboard`;
         } else if (role === "USER") {
           dashboardPath = "/user/dashboard";
         }
