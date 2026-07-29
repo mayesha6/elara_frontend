@@ -8,7 +8,19 @@ import * as z from "zod";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+
+const slugify = (text: string): string => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+    .replace(/\-\-+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+};
 import LoginImg from "@/assets/images/logimg.png";
 import IconImg from "@/assets/greetely.png";
 import Link from "next/link";
@@ -39,6 +51,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
 
   const {
@@ -269,7 +282,7 @@ export default function LoginForm() {
         reset();
 
         // ✅ Step 7: Redirect
-        const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
+        const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || searchParams.get("redirect");
         if (redirectUrl) {
           sessionStorage.removeItem("redirectAfterLogin");
           window.location.href = redirectUrl;
@@ -285,7 +298,8 @@ export default function LoginForm() {
         if (role === "SUPER_ADMIN") {
           dashboardPath = "/super-admin";
         } else if (role === "ORGANIZATION_ADMIN") {
-          dashboardPath = "/org-admin";
+          const orgName = user?.name || "org-admin";
+          dashboardPath = `/${slugify(orgName)}`;
         } else if (role === "DEPARTMENT_ADMIN") {
           dashboardPath = "/dept-admin/dashboard";
         } else if (role === "USER") {
