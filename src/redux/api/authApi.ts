@@ -94,7 +94,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     getDepartment: builder.query({
-      query: () => "/department",
+      query: () => "/department/public",
       providesTags: ["User"],
     }),
   }),
