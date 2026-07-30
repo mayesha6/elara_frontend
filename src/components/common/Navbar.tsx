@@ -52,7 +52,7 @@ export default function Navbar() {
         domain: ".greetely.com",
         path: "/",
         secure: true,
-        sameSite: "None" as const,
+        sameSite: "Lax" as const,
       };
       Cookies.remove("accessToken", cookieOptions);
       Cookies.remove("refreshToken", cookieOptions);
@@ -80,7 +80,7 @@ export default function Navbar() {
       const cookieOptions = {
         domain: isProduction ? ".greetely.com" : undefined,
         secure: isProduction,
-        sameSite: isProduction ? ("None" as const) : ("Lax" as const),
+        sameSite: "Lax" as const,
         path: "/",
       };
       Cookies.remove("accessToken", cookieOptions);

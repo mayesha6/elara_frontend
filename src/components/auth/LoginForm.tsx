@@ -205,7 +205,7 @@ export default function LoginForm() {
 
     cookieNames.forEach((name) => {
       domains.forEach((domain) => {
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/; secure; samesite=None`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/; secure; samesite=Lax`;
         document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
       });
       // js-cookie fallback
@@ -244,7 +244,7 @@ export default function LoginForm() {
         const cookieOptions: Cookies.CookieAttributes = {
           domain: isProduction ? ".greetely.com" : undefined,
           secure: isProduction,
-          sameSite: isProduction ? "None" : "Lax",
+          sameSite: "Lax",
           path: "/",
           ...(data.rememberMe ? { expires: 30 } : {}),
         };

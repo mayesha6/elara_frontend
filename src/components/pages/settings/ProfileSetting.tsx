@@ -885,12 +885,12 @@ export default function ProfileSettings() {
         Cookies.remove("accessToken", {
           domain: isProduction ? ".greetely.com" : undefined,
           secure: isProduction,
-          sameSite: isProduction ? "None" : "Lax",
+          sameSite: "Lax",
         });
         Cookies.remove("refreshToken", {
           domain: isProduction ? ".greetely.com" : undefined,
           secure: isProduction,
-          sameSite: isProduction ? "None" : "Lax",
+          sameSite: "Lax",
         });
         dispatch(logout());
         await persistor.purge();

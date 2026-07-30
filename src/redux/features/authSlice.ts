@@ -25,7 +25,7 @@ const authSlice = createSlice({
         const cookieOptions: Cookies.CookieAttributes = {
           domain: isProduction ? ".greetely.com" : undefined,
           secure: isProduction,
-          sameSite: isProduction ? "None" : "Lax",
+          sameSite: "Lax",
           path: "/",
           ...(rememberMe ? { expires: 30 } : {}),
         };
@@ -43,7 +43,7 @@ const authSlice = createSlice({
         const cookieOptions: Cookies.CookieAttributes = {
           domain: isProduction ? ".greetely.com" : undefined,
           secure: isProduction,
-          sameSite: isProduction ? "None" : "Lax",
+          sameSite: "Lax",
           path: "/",
           ...(rememberMe ? { expires: 30 } : {}),
         };
