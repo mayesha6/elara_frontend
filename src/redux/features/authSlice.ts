@@ -16,11 +16,20 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<{ token: string }>) => {
+    setUser: (
+      state,
+      action: PayloadAction<{ token: string; refresh_token?: string }>,
+    ) => {
       state.token = action.payload.token;
       state.isAuthenticated = true;
+      if (action.payload.refresh_token) {
+        state.refresh_token = action.payload.refresh_token;
+      }
       if (typeof window !== "undefined") {
-        const isProduction = process.env.NODE_ENV === "production";
+        const isProduction =
+          process.env.NODE_ENV === "production" &&
+          !window.location.hostname.includes("localhost") &&
+          !window.location.hostname.includes("127.0.0.1");
         const rememberMe = localStorage.getItem("rememberMe") === "true";
         const cookieOptions: Cookies.CookieAttributes = {
           domain: isProduction ? ".greetely.com" : undefined,
@@ -30,6 +39,9 @@ const authSlice = createSlice({
           ...(rememberMe ? { expires: 30 } : {}),
         };
         Cookies.set("accessToken", action.payload.token, cookieOptions);
+        if (action.payload.refresh_token) {
+          Cookies.set("refreshToken", action.payload.refresh_token, cookieOptions);
+        }
       }
     },
     setRefreshToken: (
@@ -38,7 +50,10 @@ const authSlice = createSlice({
     ) => {
       state.refresh_token = action.payload.refresh_token;
       if (typeof window !== "undefined") {
-        const isProduction = process.env.NODE_ENV === "production";
+        const isProduction =
+          process.env.NODE_ENV === "production" &&
+          !window.location.hostname.includes("localhost") &&
+          !window.location.hostname.includes("127.0.0.1");
         const rememberMe = localStorage.getItem("rememberMe") === "true";
         const cookieOptions: Cookies.CookieAttributes = {
           domain: isProduction ? ".greetely.com" : undefined,
@@ -55,7 +70,10 @@ const authSlice = createSlice({
       state.refresh_token = null;
       state.isAuthenticated = false;
       if (typeof window !== "undefined") {
-        const isProduction = process.env.NODE_ENV === "production";
+        const isProduction =
+          process.env.NODE_ENV === "production" &&
+          !window.location.hostname.includes("localhost") &&
+          !window.location.hostname.includes("127.0.0.1");
         const cookieOptions = {
           domain: isProduction ? ".greetely.com" : undefined,
           path: "/",
@@ -76,6 +94,21 @@ const authSlice = createSlice({
         state.refresh_token = refreshToken;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase("persist/REHYDRATE", (state: any) => {
+      if (typeof window !== "undefined") {
+        const token = Cookies.get("accessToken");
+        const refreshToken = Cookies.get("refreshToken");
+        if (token) {
+          state.token = token;
+          state.isAuthenticated = true;
+        }
+        if (refreshToken) {
+          state.refresh_token = refreshToken;
+        }
+      }
+    });
   },
 });
 

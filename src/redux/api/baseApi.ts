@@ -209,13 +209,19 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
       if (refreshResult.ok) {
         const refreshResponse = await refreshResult.json();
-        const newAccessToken = refreshResponse?.data?.accessToken;
+        const newAccessToken = refreshResponse?.data?.accessToken || refreshResponse?.accessToken;
+        const newRefreshToken = refreshResponse?.data?.refreshToken || refreshResponse?.refreshToken;
 
         if (newAccessToken) {
           if (typeof window !== "undefined") {
             console.log("Token refreshed successfully.");
           }
-          api.dispatch(setUser({ token: newAccessToken }));
+          api.dispatch(
+            setUser({
+              token: newAccessToken,
+              ...(newRefreshToken ? { refresh_token: newRefreshToken } : {}),
+            })
+          );
           // Retry the original query with the new access token
           result = await rawBaseQuery(args, api, extraOptions);
         } else {

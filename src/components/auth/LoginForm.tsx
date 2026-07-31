@@ -262,7 +262,7 @@ export default function LoginForm() {
         }
 
         // ✅ Step 5: Redux
-        dispatch(setUser({ token: accessToken }));
+        dispatch(setUser({ token: accessToken, refresh_token: refreshToken }));
 
         // ✅ Step 6: Decode role
         const decoded = jwtDecode<JwtPayload>(accessToken);
