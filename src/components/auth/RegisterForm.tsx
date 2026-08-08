@@ -295,7 +295,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -312,20 +312,15 @@ import {
   useRegisterMutation,
 } from "@/redux/api/authApi";
 
-const signupSchema = z
-  .object({
-    fullName: z.string().min(2, "Full name must be at least 2 characters"),
-    email: z.string().email("Please enter a valid email"),
-    department: z.string().min(1, "Please select a department"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(6, "Confirm password is required"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type SignupFormData = z.infer<typeof signupSchema>;
+type SignupFormData = {
+  fullName: string;
+  email: string;
+  department?: string;
+  companyName?: string;
+  phone?: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -342,6 +337,49 @@ export default function RegisterForm() {
 
   const departments: { _id: string; name: string }[] =
     departmentData?.data ?? [];
+
+  const signupSchema = useMemo(() => {
+    return z
+      .object({
+        fullName: z.string().min(2, "Full name must be at least 2 characters"),
+        email: z.string().email("Please enter a valid email"),
+        department: z.string().optional(),
+        companyName: z.string().optional(),
+        phone: z.string().optional(),
+        password: z.string().min(6, "Password must be at least 6 characters"),
+        confirmPassword: z.string().min(6, "Confirm password is required"),
+      })
+      .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+      })
+      .superRefine((data, ctx) => {
+        if (name === "ORGANIZATION") {
+          if (!data.companyName || data.companyName.trim() === "") {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Company name is required",
+              path: ["companyName"],
+            });
+          }
+          if (!data.phone || data.phone.trim() === "") {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Phone number is required",
+              path: ["phone"],
+            });
+          }
+        } else {
+          if (!data.department || data.department.trim() === "") {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Please select a department",
+              path: ["department"],
+            });
+          }
+        }
+      });
+  }, [name]);
 
   const {
     register,
@@ -363,6 +401,8 @@ export default function RegisterForm() {
         password: data.password,
         department: name === "ORGANIZATION" ? "Organization" : data.department,
         accountType: name === "ORGANIZATION" ? "ORGANIZATION" : "INDIVIDUAL",
+        companyName: name === "ORGANIZATION" ? data.companyName : undefined,
+        phone: name === "ORGANIZATION" ? data.phone : undefined,
       };
 
       const response = await registerUser(payload).unwrap();
@@ -503,6 +543,46 @@ export default function RegisterForm() {
                     </p>
                   )}
                 </div>
+              )}
+
+              {name === "ORGANIZATION" && (
+                <>
+                  {/* Company Name Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Company Name
+                    </label>
+                    <input
+                      {...register("companyName")}
+                      type="text"
+                      placeholder="Acme Corporation"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    />
+                    {errors.companyName && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.companyName.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Phone Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone
+                    </label>
+                    <input
+                      {...register("phone")}
+                      type="text"
+                      placeholder="01712345678"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    />
+                    {errors.phone && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.phone.message}
+                      </p>
+                    )}
+                  </div>
+                </>
               )}
 
               {/* Password Field */}
