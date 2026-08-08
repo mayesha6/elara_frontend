@@ -130,11 +130,11 @@ export default function Navbar() {
     if (role === "SUPER_ADMIN") {
       prefix = "super-admin";
     } else if (role === "ORGANIZATION_ADMIN") {
-      const orgName = user?.name || "org-admin";
+      const orgName = user?.companyName || user?.name || "org-admin";
       prefix = slugify(orgName);
     } else if (role === "DEPARTMENT_ADMIN") {
       const orgObj = user?.organizationId;
-      const orgName = orgObj?.name || (typeof orgObj === "string" ? orgObj : "dept-admin");
+      const orgName = orgObj?.companyName || orgObj?.name || (typeof orgObj === "string" ? orgObj : "dept-admin");
       prefix = `${slugify(orgName)}/dept-admin/dashboard`;
     } else if (role === "USER") {
       prefix = "user/dashboard";

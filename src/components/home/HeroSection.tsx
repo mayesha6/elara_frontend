@@ -42,10 +42,10 @@ const HeroSection = () => {
           if (storedUser) {
             const parsed = JSON.parse(storedUser);
             if (role === "ORGANIZATION_ADMIN") {
-              orgName = parsed.name || "";
+              orgName = parsed.companyName || parsed.name || "";
             } else if (role === "DEPARTMENT_ADMIN") {
               const orgObj = parsed.organizationId;
-              orgName = orgObj?.name || (typeof orgObj === "string" ? orgObj : "");
+              orgName = orgObj?.companyName || orgObj?.name || (typeof orgObj === "string" ? orgObj : "");
             }
           }
         } catch (e) {
