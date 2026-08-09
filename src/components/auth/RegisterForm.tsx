@@ -358,7 +358,7 @@ export default function RegisterForm() {
           if (!data.companyName || data.companyName.trim() === "") {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              message: "Company name is required",
+              message: "Organization name is required",
               path: ["companyName"],
             });
           }
@@ -478,79 +478,12 @@ export default function RegisterForm() {
 
             {/* Form */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Full Name Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
-                </label>
-                <input
-                  {...register("fullName")}
-                  type="text"
-                  placeholder="Sofur Rahman"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                />
-                {errors.fullName && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.fullName.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
-                </label>
-                <input
-                  {...register("email")}
-                  type="email"
-                  placeholder="crm@gmail.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-
-              {/* ✅ Department Field - From API with Personal Account default */}
-              {name !== "ORGANIZATION" && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Department
-                  </label>
-                  <select
-                    {...register("department")}
-                    disabled={isDepartmentLoading}
-                    defaultValue="Personal Account"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition bg-white text-gray-900 disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    <option value="">
-                      {isDepartmentLoading
-                        ? "Loading departments..."
-                        : "Personal Account"}
-                    </option>
-                    {departments.map((dept) => (
-                      <option key={dept._id} value={dept.name}>
-                        {dept.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.department && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.department.message}
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {name === "ORGANIZATION" && (
+              {name === "ORGANIZATION" ? (
                 <>
-                  {/* Company Name Field */}
+                  {/* Organization Name Field */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Company Name
+                      Organization Name
                     </label>
                     <input
                       {...register("companyName")}
@@ -561,6 +494,24 @@ export default function RegisterForm() {
                     {errors.companyName && (
                       <p className="text-red-500 text-xs mt-1">
                         {errors.companyName.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Contact Full Name Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Contact Full Name
+                    </label>
+                    <input
+                      {...register("fullName")}
+                      type="text"
+                      placeholder="Sofur Rahman"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    />
+                    {errors.fullName && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.fullName.message}
                       </p>
                     )}
                   </div>
@@ -579,6 +530,91 @@ export default function RegisterForm() {
                     {errors.phone && (
                       <p className="text-red-500 text-xs mt-1">
                         {errors.phone.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email
+                    </label>
+                    <input
+                      {...register("email")}
+                      type="email"
+                      placeholder="crm@gmail.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Full Name Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Name
+                    </label>
+                    <input
+                      {...register("fullName")}
+                      type="text"
+                      placeholder="Sofur Rahman"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    />
+                    {errors.fullName && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.fullName.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email
+                    </label>
+                    <input
+                      {...register("email")}
+                      type="email"
+                      placeholder="crm@gmail.com"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Department Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Department
+                    </label>
+                    <select
+                      {...register("department")}
+                      disabled={isDepartmentLoading}
+                      defaultValue="Personal Account"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition bg-white text-gray-900 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      <option value="">
+                        {isDepartmentLoading
+                          ? "Loading departments..."
+                          : "Personal Account"}
+                      </option>
+                      {departments.map((dept) => (
+                        <option key={dept._id} value={dept.name}>
+                          {dept.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.department && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.department.message}
                       </p>
                     )}
                   </div>
