@@ -174,7 +174,14 @@ export default function ForgetPasswordPage() {
       toast.success("Reset code sent to your email");
     } catch (error: any) {
       console.error("Failed to send reset email:", error);
-      toast.error(error?.data?.message || "Failed to send reset email");
+      const message = error?.data?.message || "Failed to send reset email";
+      if (error?.status === 429 || message.toLowerCase().includes("already sent")) {
+        setStep("otp");
+        setCountdown(120);
+        toast.info(message || "OTP already sent. Please enter the code from your email.");
+        return;
+      }
+      toast.error(message);
     }
   };
 
