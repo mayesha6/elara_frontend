@@ -80,6 +80,8 @@ const authSlice = createSlice({
         };
         Cookies.remove("accessToken", cookieOptions);
         Cookies.remove("refreshToken", cookieOptions);
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
       }
     },
 

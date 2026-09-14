@@ -188,12 +188,29 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     result.error &&
     (result.error.status === 401 || result.error.status === 403)
   ) {
+    const url = typeof args === "string" ? args : args.url;
+    // Don't attempt to refresh token if the failed request was already the refresh endpoint
+    if (url.includes("/auth/refresh-token")) {
+      api.dispatch(logout());
+      return result;
+    }
+
     if (typeof window !== "undefined") {
       console.warn("API returned 401/403. Attempting to refresh token...");
     }
 
     try {
-      const refreshTokenVal = Cookies.get("refreshToken") || (api.getState() as RootState).auth?.refresh_token;
+      const refreshTokenVal =
+        Cookies.get("refreshToken") ||
+        (api.getState() as RootState).auth?.refresh_token;
+
+      if (!refreshTokenVal) {
+        if (typeof window !== "undefined") {
+          console.warn("No refresh token available. Logging out...");
+        }
+        api.dispatch(logout());
+        return result;
+      }
 
       const refreshResult = await fetch(
         `${baseUrl}/auth/refresh-token`,
@@ -209,8 +226,10 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
       if (refreshResult.ok) {
         const refreshResponse = await refreshResult.json();
-        const newAccessToken = refreshResponse?.data?.accessToken || refreshResponse?.accessToken;
-        const newRefreshToken = refreshResponse?.data?.refreshToken || refreshResponse?.refreshToken;
+        const newAccessToken =
+          refreshResponse?.data?.accessToken || refreshResponse?.accessToken;
+        const newRefreshToken =
+          refreshResponse?.data?.refreshToken || refreshResponse?.refreshToken;
 
         if (newAccessToken) {
           if (typeof window !== "undefined") {
