@@ -32,7 +32,6 @@ export const authApi = baseApi.injectEndpoints({
         method: "POST",
         body: email,
       }),
-      invalidatesTags: ["User"],
     }),
     resendOtp: builder.mutation({
       query: (email) => ({
