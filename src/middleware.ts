@@ -50,6 +50,8 @@ export function middleware(request: NextRequest) {
   const publicRoutes = [
     "/", // Home page
     "/login",
+    "/forget-password",
+    "/create-password",
     "/recognition",
     "/pricing",
     "/redeem",
