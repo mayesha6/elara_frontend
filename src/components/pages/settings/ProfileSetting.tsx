@@ -230,7 +230,13 @@ export default function ProfileSettings() {
       formData.append("newPassword", data.newPassword || "");
       formData.append("confirmPassword", data.confirmPassword || "");
       if (data.picture instanceof FileList && data.picture.length > 0) {
-        formData.append("files", data.picture[0]);
+        const file = data.picture[0];
+        const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
+        if (!allowedTypes.includes(file.type)) {
+          toast.error("Invalid file type. Only PNG, JPEG, and WebP images are allowed.");
+          return;
+        }
+        formData.append("files", file);
       }
       const response = await updateUser(formData).unwrap();
       toast.success(response?.message || "Profile updated successfully");
@@ -460,7 +466,7 @@ export default function ProfileSettings() {
                       <input
                         type="file"
                         autoComplete="off"
-                        accept="image/*"
+                        accept="image/png, image/jpeg, image/webp"
                         {...register("picture")}
                         className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-primary"
                       />

@@ -3,14 +3,16 @@ import React, { useEffect } from "react";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { useGetMeQuery } from "@/redux/api/authApi";
 import { useAppSelector } from "@/redux/hooks";
+import { toast } from "sonner";
 
 export default function SuccessPage() {
   const token = useAppSelector((state) => state.auth.token);
   const { refetch } = useGetMeQuery(undefined, { skip: !token });
 
   useEffect(() => {
+    toast.success("Thank you for your payment!");
     if (token) {
-      refetch(); // Refetch user info to get the updated subscription plan
+      refetch(); // Refetch user info to get the updated profile data
     }
   }, [token, refetch]);
 
@@ -26,7 +28,7 @@ export default function SuccessPage() {
         <div className="space-y-2">
           <h1 className="text-3xl font-bold text-[#0b3c5d]">Payment Successful!</h1>
           <p className="text-gray-500 text-sm">
-            Thank you for subscribing! Your transaction was completed successfully, and your points have been allocated to your wallet.
+            Thank you for your payment! Your transaction was completed successfully, and your subscription/profile data has been updated.
           </p>
         </div>
 
@@ -50,3 +52,4 @@ export default function SuccessPage() {
     </div>
   );
 }
+
