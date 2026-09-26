@@ -12,6 +12,18 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { setUser, setRefreshToken } from "@/redux/features/authSlice";
 
+interface Plan {
+  _id: string;
+  name: string;
+  description?: string;
+  price: number | string;
+  interval?: string;
+  userLimit: number;
+  allocatedPoints?: number;
+  features?: string[];
+  stripePriceId?: string;
+}
+
 export default function PricingPlanSection() {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -39,7 +51,7 @@ export default function PricingPlanSection() {
   const user = meRes?.data;
 
   const { data: plansRes, isLoading: isPlansLoading } = useGetPlansListQuery();
-  const [createCheckoutSession, { isLoading: isCheckoutLoading }] = useCreateCheckoutSessionMutation();
+  const [createCheckoutSession] = useCreateCheckoutSessionMutation();
 
   const [activeTab, setActiveTab] = useState<"individual" | "organization">("individual");
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
@@ -51,7 +63,7 @@ export default function PricingPlanSection() {
     }
   }, [user]);
 
-  const handleSubscribe = async (plan: any) => {
+  const handleSubscribe = async (plan: Plan) => {
     if (!token) {
       toast.error("Please login to purchase a subscription.");
       router.push(`/login?redirect=/pricing`);
@@ -72,8 +84,9 @@ export default function PricingPlanSection() {
       } else {
         toast.error("Failed to generate checkout session.");
       }
-    } catch (err: any) {
-      toast.error(err?.data?.message || err?.message || "Failed to initiate payment");
+    } catch (err: unknown) {
+      const errorObj = err as { data?: { message?: string }; message?: string };
+      toast.error(errorObj?.data?.message || errorObj?.message || "Failed to initiate payment");
     } finally {
       setSubscribingId(null);
     }
@@ -88,19 +101,19 @@ export default function PricingPlanSection() {
     );
   }
 
-  const backendPlans = plansRes?.data || [];
+  const backendPlans: Plan[] = plansRes?.data || [];
 
   // Filter plans based on B2C vs B2B criteria
   const individualPlans = backendPlans.filter(
-    (p: any) => p.userLimit === 1 || p.price === 0
+    (p: Plan) => p.userLimit === 1 || p.price === 0
   );
   const organizationPlans = backendPlans.filter(
-    (p: any) => p.userLimit > 1
+    (p: Plan) => p.userLimit > 1
   );
 
   const displayedPlans = activeTab === "individual" ? individualPlans : organizationPlans;
 
-  const isCurrentPlan = (plan: any) => {
+  const isCurrentPlan = (plan: Plan) => {
     if (!user) return false;
     // If user's current plan is null and plan is free plan
     if (!user.currentPlan && (plan.price === 0 || plan.price === "Free")) {
@@ -155,7 +168,7 @@ export default function PricingPlanSection() {
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto justify-center">
-            {displayedPlans.map((plan: any) => {
+            {displayedPlans.map((plan: Plan) => {
               const active = isCurrentPlan(plan);
               const isSubscribing = subscribingId === plan._id;
               const isFree = plan.price === 0 || plan.price === "Free";
@@ -198,7 +211,7 @@ export default function PricingPlanSection() {
                           Up to {plan.userLimit} Users included
                         </p>
                       )}
-                      {plan.allocatedPoints > 0 && (
+                      {(plan.allocatedPoints ?? 0) > 0 && (
                         <p className="text-xs font-medium text-amber-600 mb-3 bg-amber-50/80 px-2.5 py-1 rounded-lg inline-block ml-1">
                           {plan.allocatedPoints} Points / month
                         </p>

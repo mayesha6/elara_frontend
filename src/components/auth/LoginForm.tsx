@@ -30,6 +30,7 @@ import { jwtDecode } from "jwt-decode";
 import { useLoginMutation, useResendOtpMutation } from "@/redux/api/authApi";
 import { setUser } from "@/redux/features/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
+import { getSafeRedirectUrl } from "@/utils/safeRedirect";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -76,121 +77,6 @@ export default function LoginForm() {
     typeof window !== "undefined" &&
     !window.location.hostname.includes("localhost") &&
     !window.location.hostname.includes("127.0.0.1");
-
-  // const onSubmit = async (data: LoginFormData) => {
-  //   try {
-  //     setUserEmail(data.email);
-  //     const response = await login({
-  //       email: data.email,
-  //       password: data.password,
-  //     }).unwrap();
-
-  //     if (response?.success) {
-  //       const accessToken = response?.data?.accessToken;
-  //       const refreshToken = response?.data?.refreshToken;
-  //       const user = response?.data?.user;
-
-  //       if (!accessToken || !refreshToken || !user) {
-  //         toast.error("Login failed", {
-  //           description: "Invalid server response",
-  //         });
-  //         return;
-  //       }
-
-  //       // Store token in cookies
-  //       // if (data.rememberMe) {
-  //       //   Cookies.set("accessToken", accessToken, );
-  //       //   Cookies.set("refreshToken", refreshToken);
-  //       // } else {
-  //       //   Cookies.set("accessToken", response.data.accessToken, {
-  //       //     domain: isProduction ? ".greetely.com" : undefined,
-  //       //     secure: isProduction,
-  //       //     sameSite: isProduction ? "None" : "Lax",
-  //       //   });
-  //       //   Cookies.set("refreshToken", response.data.accessToken, {
-  //       //     domain: isProduction ? ".greetely.com" : undefined,
-  //       //     secure: isProduction,
-  //       //     sameSite: isProduction ? "None" : "Lax",
-  //       //   });
-  //       // }
-
-  //       Cookies.set("accessToken", response.data.accessToken, {
-  //         domain: isProduction ? ".greetely.com" : undefined,
-  //         secure: isProduction,
-  //         sameSite: isProduction ? "None" : "Lax",
-  //       });
-  //       Cookies.set("refreshToken", response.data.accessToken, {
-  //         domain: isProduction ? ".greetely.com" : undefined,
-  //         secure: isProduction,
-  //         sameSite: isProduction ? "None" : "Lax",
-  //       });
-  //       // Optional: also store user info in localStorage
-  //       localStorage.setItem("user", JSON.stringify(user));
-
-  //       if (data.rememberMe) {
-  //         localStorage.setItem("rememberMe", "true");
-  //       } else {
-  //         localStorage.removeItem("rememberMe");
-  //       }
-
-  //       // Save token to redux
-  //       dispatch(
-  //         setUser({
-  //           token: accessToken,
-  //         }),
-  //       );
-
-  //       // Decode token / role
-  //       const decoded = jwtDecode<JwtPayload>(accessToken);
-  //       const role = decoded?.role || user?.role;
-
-  //       toast.success(`Welcome back, ${user?.name || "User"}!`, {
-  //         description: `Logged in as ${role === "ADMIN" ? "Administrator" : "User"}`,
-  //       });
-
-  //       reset();
-
-  //       const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
-
-  //       if (redirectUrl) {
-  //         sessionStorage.removeItem("redirectAfterLogin");
-  //         router.push(redirectUrl);
-  //         return;
-  //       }
-
-  //       // Role based redirect
-  //       if (role === "ADMIN") {
-  //         router.push("/");
-  //       } else if (role === "USER") {
-  //         router.push("/");
-  //       } else {
-  //         router.push("/");
-  //       }
-
-  //       router.refresh();
-  //     } else {
-  //       toast.error("Login failed", {
-  //         description: "Invalid email or password",
-  //       });
-  //       setError("root", {
-  //         message: "Invalid email or password",
-  //       });
-  //     }
-  //   } catch (error: any) {
-  //     console.error("Login error:", error);
-
-  //     const errorMessage =
-  //       error?.data?.message || error?.message || "Please try again later";
-
-  //     toast.error("Login failed", {
-  //       description: errorMessage,
-  //     });
-
-  //     setError("root", {
-  //       message: errorMessage,
-  //     });
-  //   }
-  // };
 
   // ✅ Master cookie cleaner
   const clearAllCookies = () => {
@@ -282,11 +168,14 @@ export default function LoginForm() {
         reset();
 
         // ✅ Step 7: Redirect
-        const redirectUrl = sessionStorage.getItem("redirectAfterLogin") || searchParams.get("redirect");
-        if (redirectUrl) {
+        const rawRedirect = sessionStorage.getItem("redirectAfterLogin") || searchParams.get("redirect");
+        if (rawRedirect) {
           sessionStorage.removeItem("redirectAfterLogin");
-          window.location.href = redirectUrl;
-          return;
+          const safeRedirect = getSafeRedirectUrl(rawRedirect, "");
+          if (safeRedirect) {
+            window.location.href = safeRedirect;
+            return;
+          }
         }
 
         const currentOrigin = typeof window !== "undefined" ? window.location.origin : "";

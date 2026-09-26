@@ -30,7 +30,6 @@ export default function ForgetPasswordOTP({ isOpen, email = 'user@gmail.com', on
   });
 
   const onSubmit = (data: ForgetPasswordOTPFormData) => {
-    console.log('ForgetPasswordOTP Form Data:', data);
     toast.success('OTP verified successfully!');
     if (onSuccess) {
       onSuccess(data.otp);

@@ -8,11 +8,14 @@ import { Eye, EyeOff } from "lucide-react";
 import RegisterImg from "@/assets/images/logimg.png";
 import IconImg from "@/assets/greetely.png";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
+import { useResetPasswordMutation } from "@/redux/api/authApi";
 
 // Define the schema
 const forgotPasswordSchema = z
   .object({
+    email: z.string().email("Please enter a valid email address").optional(),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")
@@ -30,10 +33,14 @@ const forgotPasswordSchema = z
 // Define the type from the schema
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
-export default function ForgotPasswordPage() {
-  const [isLoading, setIsLoading] = useState(false);
+export default function CreatePasswordPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const paramEmail = searchParams.get("email") || "";
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const {
     register,
@@ -42,23 +49,32 @@ export default function ForgotPasswordPage() {
   } = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
     mode: "onBlur",
+    defaultValues: {
+      email: paramEmail,
+    },
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
-      setIsLoading(true);
-      console.log(" Reset Password Data:", data);
+      const emailToUse = (data.email || paramEmail).trim().toLowerCase();
+      if (!emailToUse) {
+        toast.error("Email address is required to reset password.");
+        return;
+      }
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await resetPassword({
+        email: emailToUse,
+        newPassword: data.password,
+        confirmPassword: data.confirmPassword,
+      }).unwrap();
 
-      toast.success("Password reset successfully!");
-      console.log(" Password reset successfully");
-    } catch (error) {
-      console.error("Password reset error:", error);
-      toast.error("Failed to reset password. Please try again.");
-    } finally {
-      setIsLoading(false);
+      toast.success("Password updated successfully! Please login with your new password.");
+      router.push("/login");
+    } catch (error: unknown) {
+      const err = error as { data?: { message?: string }; message?: string };
+      const errorMessage =
+        err?.data?.message || err?.message || "Failed to set password. Please try again.";
+      toast.error(errorMessage);
     }
   };
 

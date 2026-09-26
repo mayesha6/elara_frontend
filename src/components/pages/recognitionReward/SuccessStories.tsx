@@ -12,7 +12,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Edux has redefined my learning journey. The courses are extensive, and the flexibility helps me seamlessly balance my studies."',
+        '"Greetely has transformed how we celebrate achievements across our organization. Peer recognitions have boosted team morale immensely."',
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Edux has redefined my learning journey. The courses are extensive, and the flexibility helps me seamlessly balance my studies."',
+        '"The rewards redemption catalog and instant kudos make appreciation effortless and meaningful for all team members."',
     },
     {
       id: 3,
@@ -32,7 +32,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Edux has redefined my learning journey. The courses are extensive, and the flexibility helps me seamlessly balance my studies."',
+        '"With Greetely, our department has seen a noticeable increase in employee engagement and team alignment."',
     },
     {
       id: 4,
@@ -42,7 +42,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Edux has redefined my learning journey. The courses are extensive, and the flexibility helps me seamlessly balance my studies."',
+        '"Managing company values and rewarding milestones has never been this seamless for our HR team."',
     },
     {
       id: 5,
@@ -52,7 +52,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Edux has redefined my learning journey. The courses are extensive, and the flexibility helps me seamlessly balance my studies."',
+        '"Greetely makes every team member feel valued. It\'s the highlight of our daily workplace culture."',
     },
     {
       id: 6,
@@ -61,7 +61,7 @@ export default function SuccessStories() {
       twitter: "https://twitter.com/darlener",
       image: "",
       quote:
-        '"Edux has redefined my learning journey. The courses are extensive, and the flexibility helps me seamlessly balance my studies."',
+        '"Simple, engaging, and powerful. Greetely has made recognition an integral part of our company culture."',
     },
   ];
 
@@ -69,11 +69,11 @@ export default function SuccessStories() {
     <section className="bg-gradient-to-t from-[#f0f7ff] to-white px-4 py-12 sm:px-6 md:py-16 lg:px-8">
       <div className="mx-auto container">
         <div className="mb-12">
-          <h2 className=" text-center text-xl md:text-3xl lg:text-4xl tracking-tight text-[#143f63] mb-4">
+          <h2 className="text-center text-xl md:text-3xl lg:text-4xl tracking-tight text-[#143f63] mb-4 font-medium">
             Success Stories
           </h2>
           <p className="mx-auto max-w-2xl text-center text-base leading-7 text-slate-500 sm:text-lg">
-            Our Students, Our Pride
+            Our Teams, Our Pride
           </p>
         </div>
 
@@ -109,7 +109,6 @@ export default function SuccessStories() {
                   </div>
                 </div>
 
-                {/* Twitter/X profile link */}
                 <a
                   href={item.twitter}
                   target="_blank"

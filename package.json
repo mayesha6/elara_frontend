@@ -8,6 +8,7 @@
     "start": "next start -p 3041",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "test": "node --test src/__tests__/*.test.js",
     "prepare": "husky"
   },
   "dependencies": {

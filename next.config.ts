@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -23,7 +24,6 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "greetely-images.s3.us-east-2.amazonaws.com",
       },
-      // ✅ ADD THIS ONE
       {
         protocol: "https",
         hostname: "getyourwatch-assets-prod.s3.eu-north-1.amazonaws.com",
@@ -32,17 +32,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "greetely-dev-images.s3.us-east-1.amazonaws.com",
       },
-
       {
         protocol: "https",
-        hostname:
-          "wildfire-949501733658-eu-west-2-an.s3.eu-west-2.amazonaws.com",
+        hostname: "wildfire-949501733658-eu-west-2-an.s3.eu-west-2.amazonaws.com",
         pathname: "/**",
       },
     ],
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
 };
 

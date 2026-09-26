@@ -98,7 +98,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase("persist/REHYDRATE", (state: any) => {
+    builder.addCase("persist/REHYDRATE", (state) => {
       if (typeof window !== "undefined") {
         const token = Cookies.get("accessToken");
         const refreshToken = Cookies.get("refreshToken");

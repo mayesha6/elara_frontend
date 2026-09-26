@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { useGetMeQuery } from "@/redux/api/authApi";
 import { useAppSelector } from "@/redux/hooks";
 
 export default function SuccessPage() {
-  const router = useRouter();
   const token = useAppSelector((state) => state.auth.token);
   const { refetch } = useGetMeQuery(undefined, { skip: !token });
 

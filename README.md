@@ -1,128 +1,191 @@
-# Messan Marcus / Greetely - Frontend
+# Greetely Frontend
 
-An employee recognition, rewards, and engagement platform built with modern web technologies. This application provides a seamless experience for users and administrators to manage recognitions, rewards redemption, user profiles, and pricing plans.
+An employee recognition, rewards, and engagement web application for **Greetely**. Built with modern React 19, Next.js 15 (App Router), Redux Toolkit, and Tailwind CSS.
+
+---
+
+## 📋 Table of Contents
+
+- [Features & Overview](#-features--overview)
+- [Tech Stack](#-tech-stack)
+- [Required Environment Variables](#-required-environment-variables)
+- [Local Setup & Development](#-local-setup--development)
+- [Automated Testing & Quality Checks](#-automated-testing--quality-checks)
+- [Build & Production Run](#-build--production-run)
+- [Deployment Steps](#-deployment-steps)
+- [Rollback Process](#-rollback-process)
+- [Security & Best Practices](#-security--best-practices)
+
+---
+
+## 🏆 Features & Overview
+
+- **🔐 Authentication & Account Management:**
+  - Secure Login, Registration (Individual & Organization), OTP Verification.
+  - Real API integration for Password Reset (`/create-password` and `/forget-password`).
+  - Open Redirect protection via Whitelisted path sanitization.
+  - Role-based Route Protection via Next.js Middleware.
+
+- **🎖️ Recognition & Rewards Catalog:**
+  - Employee recognition feeds, peer kudos, and recognition rewards.
+  - Dynamic Pricing Plans for Individuals & Organizations with Stripe Checkout integration.
+  - Responsive design with WebP/AVIF asset support and micro-animations.
 
 ---
 
 ## 🚀 Tech Stack
 
 - **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Turbopack)
-- **UI Library:** [React 19](https://react.dev/)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Library:** [React 19](https://react.dev/)
+- **Language:** [TypeScript 5](https://www.typescriptlang.org/)
 - **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) & RTK Query
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/), [Radix UI](https://www.radix-ui.com/), shadcn/ui
-- **Animations:** [Framer Motion](https://www.framer.com/motion/), [Lottie React](https://github.com/gamertart/lottie-react), React Fast Marquee
-- **Form Handling & Validation:** [React Hook Form](https://react-hook-form.com/), [Zod](https://zod.dev/)
-- **Icons:** [Lucide React](https://lucide.dev/), React Icons
-- **Notifications:** [Sonner](https://sonner.emilkowal.si/)
-- **Code Quality & Git Hooks:** ESLint, Husky, Lint-staged
+- **Styling & UI:** Tailwind CSS v4, Radix UI, Lucide Icons, Framer Motion, Sonner Toasts
+- **Form Handling:** React Hook Form + Zod Validation
 
 ---
 
-## ✨ Features
+## 🔑 Required Environment Variables
 
-- **🔐 Authentication & Authorization:**
-  - Login & Registration flows
-  - OTP Verification & Password Recovery
-  - Role-based Route Protection via Next.js Middleware
+Create a `.env` file in the project root by copying `.env.example`:
 
-- **🏆 Recognition & Rewards System:**
-  - Recognize peers and team members
-  - Points redemption catalog
-  - Testimonials & Resources section
-  - Flexible Pricing plans
-
-- **📊 Dashboard Management:**
-  - Dedicated layouts for User and Admin workflows
-  - Profile & Account Settings management
-
----
-
-## 📁 Project Structure
-
-```text
-messanmarcus-frontend-main/
-├── src/
-│   ├── app/                    # Next.js App Router pages & layouts
-│   │   ├── (auth)/             # Authentication routes (login, register, otp, reset)
-│   │   ├── (dashboardLayout)/  # User & Admin dashboard pages
-│   │   └── (defaultLayout)/    # Public pages (home, pricing, recognition, redeem)
-│   ├── components/             # Reusable UI components & layouts
-│   ├── constants/              # Global constants & navigation links
-│   ├── hooks/                  # Custom React hooks
-│   ├── lib/                    # Library configurations (e.g. utils, shadcn helper)
-│   ├── redux/                  # Redux store, baseApi, and slices
-│   ├── schema/                 # Zod validation schemas
-│   ├── types/                  # TypeScript interface definitions
-│   └── utils/                  # Utility helper functions
-├── public/                     # Static assets (images, icons)
-├── .env                        # Environment variables configuration
-├── next.config.ts              # Next.js configuration
-├── package.json                # Project dependencies & scripts
-└── tsconfig.json               # TypeScript configuration
+```bash
+cp .env.example .env
 ```
 
+| Variable Name | Description | Example / Default Value |
+| :--- | :--- | :--- |
+| `NODE_ENV` | Application execution environment (`development`, `production`, `test`) | `development` |
+| `NEXT_PUBLIC_BASE_URL` | Backend REST API base URL | `https://api.greetely.com/api/v1` |
+| `NEXTAUTH_URL` | Dashboard base URL for role-based redirects | `https://dashboard.greetely.com` |
+| `NEXT_PUBLIC_SITE_URL` | Main Greetely public website URL | `https://greetely.com` |
+
+> ⚠️ **Security Note:** Never commit actual `.env` files with secret keys to version control. `.env.local` and `.env.production.local` are ignored in `.gitignore`.
+
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Local Setup & Development
 
-### Prerequisites
-
-Ensure you have the following installed on your machine:
-- **Node.js** (v18.x or higher recommended)
-- **npm**, **yarn**, or **pnpm**
-
-### 1. Environment Setup
-
-Create a `.env` file in the root directory (or update the existing one) with the following environment variables:
-
-```env
-NODE_ENV=development
-NEXT_PUBLIC_BASE_URL="https://api.greetely.com/api/v1"
-NEXTAUTH_URL="https://dashboard.greetely.com"
-```
+### 1. Prerequisites
+- **Node.js:** v18.x or higher
+- **npm:** v9.x or higher
 
 ### 2. Install Dependencies
-
 ```bash
 npm install
 ```
 
-### 3. Run the Development Server
-
-Start the development server with Turbopack (runs on port `3041` by default):
-
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
-
-Open [http://localhost:3041](http://localhost:3041) in your browser to view the application.
-
----
-
-## 📜 Available Scripts
-
-In the project directory, you can run:
-
-| Command | Description |
-| :--- | :--- |
-| `npm run dev` | Starts the Next.js development server with Turbopack on port `3041`. |
-| `npm run build` | Builds the application for production deployment. |
-| `npm run start` | Starts the production server on port `3041`. |
-| `npm run lint` | Runs ESLint to check for code formatting and syntax issues. |
-| `npm run lint:fix` | Automatically fixes auto-fixable ESLint errors. |
+Open [http://localhost:3041](http://localhost:3041) in your browser.
 
 ---
 
-## 🤝 Contributing & Guidelines
+## 🧪 Automated Testing & Quality Checks
 
-1. Create a feature branch (`git checkout -b feature/amazing-feature`)
-2. Commit your changes (`git commit -m 'Add amazing feature'`)
-3. Push to the branch (`git push origin feature/amazing-feature`)
-4. Open a Pull Request
+### Run Automated Tests
+```bash
+npm test
+```
+Runs the automated test suite for security validation, open redirect guards, and customer journey logic.
+
+### Run Code Linting & Formatting
+```bash
+npm run lint        # Check for lint errors
+npm run lint:fix    # Automatically fix auto-fixable lint errors
+```
+
+> 🛡️ Note: Lint checks are automatically executed during production builds (`ignoreDuringBuilds: false` in `next.config.ts`).
+
+---
+
+## 🏗️ Build & Production Run
+
+### 1. Build for Production
+```bash
+npm run build
+```
+
+### 2. Start Production Server
+```bash
+npm run start
+```
+Starts the Next.js production server on port `3041`.
+
+---
+
+## 🚀 Deployment Steps
+
+### Option A: Deploying on Vercel / Cloud Platforms
+1. Connect the Git repository to Vercel/Cloud platform.
+2. Set Environment Variables in Project Settings (`NEXT_PUBLIC_BASE_URL`, `NEXTAUTH_URL`).
+3. Set Build Command: `npm run build`
+4. Set Output Directory: Next.js default (`.next`)
+5. Click **Deploy**.
+
+### Option B: Deploying on a Node.js / PM2 Server
+1. Clone the repository on the server:
+   ```bash
+   git clone <repository-url>
+   cd messanmarcus-frontend-main
+   ```
+2. Install production dependencies:
+   ```bash
+   npm ci
+   ```
+3. Build the application:
+   ```bash
+   npm run build
+   ```
+4. Start with PM2:
+   ```bash
+   pm2 start npm --name "greetely-frontend" -- run start
+   pm2 save
+   ```
+
+---
+
+## 🔄 Rollback Process
+
+In case an issue is identified in a new production release, follow this simple rollback process:
+
+### Instant Rollback (Vercel / Managed Platform)
+1. Go to your Vercel Dashboard -> **Deployments**.
+2. Find the previous stable build deployment.
+3. Click the **...** menu next to the deployment and select **Promote to Production**.
+4. The site will revert instantly without rebuilding.
+
+### Manual Server Rollback (PM2 / Standalone Server)
+1. Check git commit history to locate the last stable release tag/commit hash:
+   ```bash
+   git log --oneline -n 5
+   ```
+2. Checkout the previous stable commit tag:
+   ```bash
+   git checkout <last-stable-commit-hash-or-tag>
+   ```
+3. Reinstall dependencies & rebuild:
+   ```bash
+   npm ci
+   npm run build
+   ```
+4. Restart PM2 process:
+   ```bash
+   pm2 restart greetely-frontend
+   ```
+
+---
+
+## 🛡️ Security & Best Practices
+
+- **HttpOnly Cookie Tokens:** Access & Refresh tokens are managed securely and kept safe from script injection.
+- **Open Redirect Guard:** All query-string redirect parameters are sanitized using `getSafeRedirectUrl()`.
+- **Zero Sensitive Console Logging:** No passwords, OTPs, or token payload logs are output to browser console.
+- **Validated Authentication:** Password reset and login processes interact directly with backend API endpoints with validation schemas.
 
 ---
 
 ## 📄 License
 
-Private & Confidential - Messan Marcus / Greetely. All rights reserved.
+Private & Confidential - Greetely. All rights reserved.
