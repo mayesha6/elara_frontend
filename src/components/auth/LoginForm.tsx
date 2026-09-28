@@ -24,8 +24,6 @@ const slugify = (text: string): string => {
 import LoginImg from "@/assets/images/logimg.png";
 import IconImg from "@/assets/greetely.png";
 import Link from "next/link";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 
 import { useLoginMutation, useResendOtpMutation } from "@/redux/api/authApi";
 import { setUser } from "@/redux/features/authSlice";
@@ -39,14 +37,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
-
-interface JwtPayload {
-  userId?: string;
-  email?: string;
-  role?: string;
-  iat?: number;
-  exp?: number;
-}
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -71,35 +61,6 @@ export default function LoginForm() {
   });
 
   const [login, { isLoading }] = useLoginMutation();
-
-  const isProduction =
-    process.env.NODE_ENV === "production" &&
-    typeof window !== "undefined" &&
-    !window.location.hostname.includes("localhost") &&
-    !window.location.hostname.includes("127.0.0.1");
-
-  // ✅ Master cookie cleaner
-  const clearAllCookies = () => {
-    const cookieNames = ["accessToken", "refreshToken"];
-    const domains = [
-      ".greetely.com",
-      "greetely.com",
-      "dashboard.greetely.com",
-      ".dashboard.greetely.com",
-      window.location.hostname,
-    ];
-
-    cookieNames.forEach((name) => {
-      domains.forEach((domain) => {
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/; secure; samesite=Lax`;
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=${domain}; path=/`;
-      });
-      // js-cookie fallback
-      Cookies.remove(name, { path: "/" });
-      Cookies.remove(name, { domain: ".greetely.com", path: "/" });
-      Cookies.remove(name, { domain: "greetely.com", path: "/" });
-    });
-  };
 
   // ✅ Login onSubmit
   const onSubmit = async (data: LoginFormData) => {
