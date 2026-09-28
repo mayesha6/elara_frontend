@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 interface AuthState {
+  user: any | null;
   token: string | null;
   refresh_token: string | null;
   isAuthenticated: boolean;
 }
 
 const initialState: AuthState = {
+  user: null,
   token: null,
   refresh_token: null,
   isAuthenticated: false,
@@ -18,9 +20,14 @@ const authSlice = createSlice({
   reducers: {
     setUser: (
       state,
-      action: PayloadAction<{ token: string; refresh_token?: string }>,
+      action: PayloadAction<{ user?: any; token?: string; refresh_token?: string }>,
     ) => {
-      state.token = action.payload.token;
+      if (action.payload.user) {
+        state.user = action.payload.user;
+      }
+      if (action.payload.token) {
+        state.token = action.payload.token;
+      }
       state.isAuthenticated = true;
       if (action.payload.refresh_token) {
         state.refresh_token = action.payload.refresh_token;
@@ -38,7 +45,9 @@ const authSlice = createSlice({
           path: "/",
           ...(rememberMe ? { expires: 30 } : {}),
         };
-        Cookies.set("accessToken", action.payload.token, cookieOptions);
+        if (action.payload.token) {
+          Cookies.set("accessToken", action.payload.token, cookieOptions);
+        }
         if (action.payload.refresh_token) {
           Cookies.set("refreshToken", action.payload.refresh_token, cookieOptions);
         }

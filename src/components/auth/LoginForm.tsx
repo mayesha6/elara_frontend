@@ -112,47 +112,25 @@ export default function LoginForm() {
       }).unwrap();
 
       if (response?.success) {
-        const accessToken = response?.data?.accessToken;
-        const refreshToken = response?.data?.refreshToken;
-        const user = response?.data?.user;
+        const user = response?.data?.user || response?.data;
 
-        if (!accessToken || !refreshToken || !user) {
+        if (!user || !user.email) {
           toast.error("Login failed", {
             description: "Invalid server response",
           });
           return;
         }
 
-        // ✅ Step 1: Clear ALL old cookies first
-        clearAllCookies();
-
-        // ✅ Step 2: Single consistent cookie options
-        const cookieOptions: Cookies.CookieAttributes = {
-          domain: isProduction ? ".greetely.com" : undefined,
-          secure: isProduction,
-          sameSite: "Lax",
-          path: "/",
-          ...(data.rememberMe ? { expires: 30 } : {}),
-        };
-
-        // ✅ Step 3: Set cookies ONCE
-        Cookies.set("accessToken", accessToken, cookieOptions);
-        Cookies.set("refreshToken", refreshToken, cookieOptions);
-
-        // ✅ Step 4: localStorage
-        localStorage.setItem("user", JSON.stringify(user));
+        // ✅ Step 1: Storage & Redux
         if (data.rememberMe) {
           localStorage.setItem("rememberMe", "true");
         } else {
           localStorage.removeItem("rememberMe");
         }
 
-        // ✅ Step 5: Redux
-        dispatch(setUser({ token: accessToken, refresh_token: refreshToken }));
+        dispatch(setUser({ user }));
 
-        // ✅ Step 6: Decode role
-        const decoded = jwtDecode<JwtPayload>(accessToken);
-        const role = decoded?.role || user?.role;
+        const role = user?.role;
 
         const getRoleLabel = (r?: string) => {
           if (r === "SUPER_ADMIN") return "Super Admin";

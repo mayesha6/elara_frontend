@@ -10,6 +10,7 @@ if (!baseUrl) {
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl,
+  credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth?.token;
     if (token) {
@@ -38,15 +39,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     }
 
     try {
-      const refreshTokenVal =
-        Cookies.get("refreshToken") ||
-        (api.getState() as RootState).auth?.refresh_token;
-
-      if (!refreshTokenVal) {
-        api.dispatch(logout());
-        return result;
-      }
-
       const refreshResult = await fetch(
         `${baseUrl}/auth/refresh-token`,
         {
@@ -54,30 +46,16 @@ const baseQueryWithRefreshToken: BaseQueryFn<
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ refreshToken: refreshTokenVal }),
           credentials: "include",
         }
       );
 
       if (refreshResult.ok) {
-        const refreshResponse = await refreshResult.json();
-        const newAccessToken =
-          refreshResponse?.data?.accessToken || refreshResponse?.accessToken;
-        const newRefreshToken =
-          refreshResponse?.data?.refreshToken || refreshResponse?.refreshToken;
-
-        if (newAccessToken) {
-          api.dispatch(
-            setUser({
-              token: newAccessToken,
-              ...(newRefreshToken ? { refresh_token: newRefreshToken } : {}),
-            })
-          );
-          // Retry the original query with the new access token
-          result = await rawBaseQuery(args, api, extraOptions);
-        } else {
-          api.dispatch(logout());
-        }
+        api.dispatch(setUser({ token: "cookie_managed" }));
+        result = await rawBaseQuery(args, api, extraOptions);
+      } else {
+        api.dispatch(logout());
+      }
       } else {
         api.dispatch(logout());
       }
