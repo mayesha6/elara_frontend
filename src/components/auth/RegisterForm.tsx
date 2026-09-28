@@ -333,10 +333,10 @@ export default function RegisterForm() {
 
   // ✅ Fetch departments from API
   const { data: departmentData, isLoading: isDepartmentLoading } =
-    useGetDepartmentQuery("");
+    useGetDepartmentQuery(undefined);
 
   const departments: { _id: string; name: string }[] =
-    departmentData?.data ?? [];
+    (departmentData as any)?.data ?? [];
 
   const signupSchema = useMemo(() => {
     return z

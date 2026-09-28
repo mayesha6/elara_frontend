@@ -140,7 +140,7 @@ export default function ProfileSettings() {
   };
 
   const { data: departmentData, isLoading: isDepartmentLoading } =
-    useGetDepartmentQuery("") as {
+    useGetDepartmentQuery(undefined) as {
       data?: DepartmentResponse;
       isLoading: boolean;
     };

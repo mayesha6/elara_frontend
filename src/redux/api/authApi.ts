@@ -92,7 +92,15 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
-    getDepartment: builder.query({
+    logoutUser: builder.mutation<unknown, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    getDepartment: builder.query<unknown, string | void | undefined>({
       query: () => "/department/public",
       providesTags: ["User"],
     }),
@@ -113,4 +121,5 @@ export const {
   useUpdateUserMutation,
   useUserAccountDeleteMutation,
   useGetDepartmentQuery,
+  useLogoutUserMutation,
 } = authApi;

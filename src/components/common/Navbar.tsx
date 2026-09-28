@@ -2,12 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { LayoutDashboard, LogOut, Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/features/authSlice";
 import { persistor } from "@/redux/store";
-import { useGetMeQuery } from "@/redux/api/authApi";
+import { useGetMeQuery, useLogoutUserMutation } from "@/redux/api/authApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { useSearchParams } from "next/navigation";
 
 interface UserProfile {
@@ -25,13 +26,13 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const router = useRouter();
   const dispatch = useDispatch();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const searchParams = useSearchParams();
 
   const { data: profileData, isLoading: isProfileLoading } = useGetMeQuery();
+  const [logoutUser] = useLogoutUserMutation();
 
   const user = (profileData?.data ?? null) as UserProfile | null;
 
@@ -44,6 +45,7 @@ export default function Navbar() {
     const logoutParam = searchParams.get("logout");
     if (logoutParam === "true") {
       dispatch(logout());
+      dispatch(baseApi.util.resetApiState());
     }
   }, [searchParams, dispatch]);
 
@@ -63,15 +65,18 @@ export default function Navbar() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
+      await logoutUser().unwrap().catch(() => {});
       dispatch(logout());
+      dispatch(baseApi.util.resetApiState());
       await persistor.purge();
       localStorage.removeItem("persist:root");
       localStorage.removeItem("user");
 
       setIsDropdownOpen(false);
-      router.push("/");
+      window.location.href = "/";
     } catch (error) {
       console.error("Logout error:", error);
+      window.location.href = "/";
     } finally {
       setIsLoggingOut(false);
     }

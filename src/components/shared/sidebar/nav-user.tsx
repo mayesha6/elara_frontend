@@ -17,9 +17,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useAppDispatch } from "@/redux/hooks";
-import { useGetMeQuery } from "@/redux/api/authApi";
+import { useGetMeQuery, useLogoutUserMutation } from "@/redux/api/authApi";
+import { baseApi } from "@/redux/api/baseApi";
 import { logout } from "@/redux/features/authSlice";
 import Image from "next/image";
 
@@ -28,14 +29,20 @@ export function NavUser() {
   const dispatch = useAppDispatch();
 
   const { data: profileData, error, isLoading } = useGetMeQuery();
+  const [logoutUser] = useLogoutUserMutation();
   const data = (profileData?.data ?? profileData) as { firstName?: string; email?: string; image?: string } | undefined;
 
-  const router = useRouter();
   const pathname = usePathname();
 
   const handleLogout = async () => {
-    dispatch(logout());
-    router.push("/login?redirect=" + pathname);
+    try {
+      await logoutUser().unwrap().catch(() => {});
+      dispatch(logout());
+      dispatch(baseApi.util.resetApiState());
+      window.location.href = "/login?redirect=" + encodeURIComponent(pathname);
+    } catch {
+      window.location.href = "/login?redirect=" + encodeURIComponent(pathname);
+    }
   };
 
   // Loading state
