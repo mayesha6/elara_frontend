@@ -56,9 +56,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       } else {
         api.dispatch(logout());
       }
-      } else {
-        api.dispatch(logout());
-      }
     } catch {
       api.dispatch(logout());
     }
