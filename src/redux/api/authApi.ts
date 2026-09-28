@@ -68,7 +68,7 @@ export const authApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
-    getMe: builder.query({
+    getMe: builder.query<{ statusCode?: number; success?: boolean; data?: Record<string, unknown> }, void | undefined>({
       query: () => ({
         url: "/user/me",
         method: "GET",

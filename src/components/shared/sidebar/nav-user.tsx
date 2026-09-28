@@ -18,17 +18,17 @@ import {
 } from "@/components/ui/sidebar";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { useGetMeQuery } from "@/redux/api/authApi";
 import { logout } from "@/redux/features/authSlice";
 import Image from "next/image";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const token = useAppSelector((state) => state.auth.token);
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading } = useGetMeQuery({ skip: !token });
+  const { data: profileData, error, isLoading } = useGetMeQuery();
+  const data = (profileData?.data ?? profileData) as { firstName?: string; email?: string; image?: string } | undefined;
 
   const router = useRouter();
   const pathname = usePathname();
@@ -85,7 +85,7 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={data?.image || placeholder}
+                  src={data?.image || placeholder.src}
                   alt={data?.firstName ?? "User"}
                   className="h-8 w-8 object-cover rounded-lg"
                 />

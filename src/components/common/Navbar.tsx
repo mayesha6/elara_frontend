@@ -4,12 +4,21 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, LogOut, Loader2 } from "lucide-react";
-import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "@/redux/features/authSlice";
-import { persistor, RootState } from "@/redux/store";
+import { persistor } from "@/redux/store";
 import { useGetMeQuery } from "@/redux/api/authApi";
 import { useSearchParams } from "next/navigation";
+
+interface UserProfile {
+  name?: string;
+  email?: string;
+  role?: string;
+  picture?: string;
+  companyName?: string;
+  organizationId?: { companyName?: string; name?: string } | string;
+  wallet?: { pointsBalance?: number };
+}
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,43 +30,22 @@ export default function Navbar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const searchParams = useSearchParams();
-  const token = useSelector((state: RootState) => state.auth?.token);
 
-  const { data: profileData, isLoading: isProfileLoading } = useGetMeQuery(
-    undefined,
-    { skip: !token },
-  );
+  const { data: profileData, isLoading: isProfileLoading } = useGetMeQuery();
 
-  const user = profileData?.data ?? null;
-  const tokenKeep = Cookies.get("accessToken");
+  const user = (profileData?.data ?? null) as UserProfile | null;
 
-  // ✅ Only true when both cookie AND user data are loaded
-  const isAuthenticated = !!tokenKeep && !!user;
-
-  // ✅ Only show spinner when there's actually a token/cookie to wait for
-  const isLoadingAuth =
-    (isProfileLoading && !!token) || (!!tokenKeep && !user && !!token);
+  const isAuthenticated = !!user;
+  const isLoadingAuth = isProfileLoading;
 
   const domain = typeof window !== "undefined" ? window.location.origin : "";
-  const isProduction =
-    process.env.NODE_ENV === "production" &&
-    typeof window !== "undefined" &&
-    !window.location.hostname.includes("localhost") &&
-    !window.location.hostname.includes("127.0.0.1");
 
   useEffect(() => {
     const logoutParam = searchParams.get("logout");
     if (logoutParam === "true") {
-      const cookieOptions = {
-        domain: ".greetely.com",
-        path: "/",
-        secure: true,
-        sameSite: "Lax" as const,
-      };
-      Cookies.remove("accessToken", cookieOptions);
-      Cookies.remove("refreshToken", cookieOptions);
+      dispatch(logout());
     }
-  }, [searchParams]);
+  }, [searchParams, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -72,29 +60,16 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
-
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      const cookieOptions = {
-        domain: isProduction ? ".greetely.com" : undefined,
-        secure: isProduction,
-        sameSite: "Lax" as const,
-        path: "/",
-      };
-      Cookies.remove("accessToken", cookieOptions);
-      Cookies.remove("refreshToken", cookieOptions);
-      Cookies.remove("accessToken", { path: "/" });
-      Cookies.remove("refreshToken", { path: "/" });
-
       dispatch(logout());
       await persistor.purge();
       localStorage.removeItem("persist:root");
       localStorage.removeItem("user");
 
       setIsDropdownOpen(false);
-      router.push("/"); // ✅ hard navigate instead of refresh + refetch
+      router.push("/");
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -130,11 +105,13 @@ export default function Navbar() {
     if (role === "SUPER_ADMIN") {
       prefix = "super-admin";
     } else if (role === "ORGANIZATION_ADMIN") {
-      const orgName = user?.companyName || user?.name || "org-admin";
+      const orgName = String(user?.companyName || user?.name || "org-admin");
       prefix = slugify(orgName);
     } else if (role === "DEPARTMENT_ADMIN") {
-      const orgObj = user?.organizationId;
-      const orgName = orgObj?.companyName || orgObj?.name || (typeof orgObj === "string" ? orgObj : "dept-admin");
+      const orgObj = user?.organizationId as { companyName?: string; name?: string } | string | undefined;
+      const orgName = String(
+        (typeof orgObj === "object" ? orgObj?.companyName || orgObj?.name : orgObj) || "dept-admin"
+      );
       prefix = `${slugify(orgName)}/dept-admin/dashboard`;
     } else if (role === "USER") {
       prefix = "user/dashboard";

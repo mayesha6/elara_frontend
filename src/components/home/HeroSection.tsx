@@ -2,8 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import { useGetMeQuery } from "@/redux/api/authApi";
 
 // 👇 Update this path to match your actual image file
 import heroImg from "@/assets/images/hero.png";
@@ -13,7 +12,8 @@ import AccountTypeModal from "@/components/common/AccountTypeModal";
 
 const HeroSection = () => {
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
-  const tokenKeep = Cookies.get("accessToken");
+  const { data: profileData } = useGetMeQuery();
+  const user = profileData?.data ?? null;
 
   const domain = typeof window !== "undefined" ? window.location.origin : "";
 
@@ -30,37 +30,24 @@ const HeroSection = () => {
   };
 
   const handleSendRecognition = () => {
-    if (tokenKeep) {
+    if (user) {
       let prefix = "user/dashboard";
-      try {
-        const decoded = jwtDecode<{ role?: string }>(tokenKeep);
-        const role = decoded?.role;
-
-        let orgName = "";
-        try {
-          const storedUser = localStorage.getItem("user");
-          if (storedUser) {
-            const parsed = JSON.parse(storedUser);
-            if (role === "ORGANIZATION_ADMIN") {
-              orgName = parsed.companyName || parsed.name || "";
-            } else if (role === "DEPARTMENT_ADMIN") {
-              const orgObj = parsed.organizationId;
-              orgName = orgObj?.companyName || orgObj?.name || (typeof orgObj === "string" ? orgObj : "");
-            }
-          }
-        } catch (e) {
-          console.error("Failed to parse user from localStorage:", e);
-        }
-
-        if (role === "SUPER_ADMIN") prefix = "super-admin";
-        else if (role === "ORGANIZATION_ADMIN") {
-          prefix = orgName ? slugify(orgName) : "org-admin";
-        } else if (role === "DEPARTMENT_ADMIN") {
-          prefix = orgName ? `${slugify(orgName)}/dept-admin/dashboard` : "dept-admin/dashboard";
-        } else if (role === "USER") prefix = "user/dashboard";
-      } catch (err) {
-        console.error("Token decoding failed", err);
+      const role = user.role;
+      let orgName = "";
+      const u = user as { companyName?: string; name?: string; organizationId?: { companyName?: string; name?: string } | string };
+      if (role === "ORGANIZATION_ADMIN") {
+        orgName = u.companyName || u.name || "";
+      } else if (role === "DEPARTMENT_ADMIN") {
+        const orgObj = u.organizationId;
+        orgName = String((typeof orgObj === "object" ? orgObj?.companyName || orgObj?.name : orgObj) || "");
       }
+
+      if (role === "SUPER_ADMIN") prefix = "super-admin";
+      else if (role === "ORGANIZATION_ADMIN") {
+        prefix = orgName ? slugify(orgName) : "org-admin";
+      } else if (role === "DEPARTMENT_ADMIN") {
+        prefix = orgName ? `${slugify(orgName)}/dept-admin/dashboard` : "dept-admin/dashboard";
+      } else if (role === "USER") prefix = "user/dashboard";
 
       const dashboardBaseUrl =
         domain === "http://localhost:3041"
@@ -93,7 +80,7 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 items-center mb-6">
-            {tokenKeep ? (
+            {user ? (
               <>
                 <button
                   onClick={handleSendRecognition}

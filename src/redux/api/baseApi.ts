@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../store";
 import { logout, setUser } from "../features/authSlice";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -10,13 +9,6 @@ if (!baseUrl) {
 const rawBaseQuery = fetchBaseQuery({
   baseUrl,
   credentials: "include",
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).auth?.token;
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
-    return headers;
-  },
 });
 
 const baseQueryWithRefreshToken: BaseQueryFn<
@@ -50,7 +42,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       );
 
       if (refreshResult.ok) {
-        api.dispatch(setUser({ token: "cookie_managed" }));
+        api.dispatch(setUser({}));
         result = await rawBaseQuery(args, api, extraOptions);
       } else {
         api.dispatch(logout());

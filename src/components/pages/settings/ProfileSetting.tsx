@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Eye, EyeOff, Trash2, AlertTriangle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/features/authSlice";
 import { persistor } from "@/redux/store";
@@ -153,12 +152,6 @@ export default function ProfileSettings() {
   const user = meData?.data;
   const departments = departmentData?.data ?? [];
 
-  const isProduction =
-    process.env.NODE_ENV === "production" &&
-    typeof window !== "undefined" &&
-    !window.location.hostname.includes("localhost") &&
-    !window.location.hostname.includes("127.0.0.1");
-
   const defaultValues = useMemo<ProfileSettingsFormValues>(
     () => ({
       name: user?.name ?? "",
@@ -254,16 +247,6 @@ export default function ProfileSettings() {
       if (response.success) {
         toast.success("Account deleted successfully");
         router.push("/");
-        Cookies.remove("accessToken", {
-          domain: isProduction ? ".greetely.com" : undefined,
-          secure: isProduction,
-          sameSite: "Lax",
-        });
-        Cookies.remove("refreshToken", {
-          domain: isProduction ? ".greetely.com" : undefined,
-          secure: isProduction,
-          sameSite: "Lax",
-        });
         dispatch(logout());
         await persistor.purge();
         localStorage.removeItem("persist:root");

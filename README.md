@@ -128,7 +128,7 @@ Starts the Next.js production server on port `3041`.
 1. Clone the repository on the server:
    ```bash
    git clone <repository-url>
-   cd messanmarcus-frontend-main
+   cd greetely-frontend
    ```
 2. Install production dependencies:
    ```bash

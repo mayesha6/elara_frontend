@@ -55,6 +55,18 @@ export const subscriptionApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Subscription"],
     }),
+
+    verifyPaymentSession: builder.mutation<
+      { statusCode: number; success: boolean; message: string; data?: unknown },
+      { sessionId?: string; paymentIntent?: string }
+    >({
+      query: (data) => ({
+        url: "/subscription/verify",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Subscription", "User"],
+    }),
   }),
 });
 
@@ -62,4 +74,5 @@ export const {
   useGetPlansListQuery,
   useCreateCheckoutSessionMutation,
   useGetMySubscriptionQuery,
+  useVerifyPaymentSessionMutation,
 } = subscriptionApi;

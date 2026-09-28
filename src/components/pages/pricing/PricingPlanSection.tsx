@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
-import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useGetMeQuery } from "@/redux/api/authApi";
 import {
   useGetPlansListQuery,
@@ -10,7 +9,6 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { setUser, setRefreshToken } from "@/redux/features/authSlice";
 
 interface Plan {
   _id: string;
@@ -26,28 +24,8 @@ interface Plan {
 
 export default function PricingPlanSection() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.auth.token);
 
-  // Auto-login if token is passed in query parameters (useful for local dev and redirects)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlToken = urlParams.get("token");
-      const urlRefreshToken = urlParams.get("refreshToken");
-      if (urlToken) {
-        dispatch(setUser({ token: urlToken }));
-        if (urlRefreshToken) {
-          dispatch(setRefreshToken({ refresh_token: urlRefreshToken }));
-        }
-        // Clean up the token query param from URL
-        const cleanUrl = window.location.pathname;
-        window.history.replaceState({}, "", cleanUrl);
-      }
-    }
-  }, [dispatch]);
-
-  const { data: meRes } = useGetMeQuery(undefined, { skip: !token });
+  const { data: meRes } = useGetMeQuery();
   const user = meRes?.data;
 
   const { data: plansRes, isLoading: isPlansLoading } = useGetPlansListQuery();
@@ -64,7 +42,7 @@ export default function PricingPlanSection() {
   }, [user]);
 
   const handleSubscribe = async (plan: Plan) => {
-    if (!token) {
+    if (!user) {
       toast.error("Please login to purchase a subscription.");
       router.push(`/login?redirect=/pricing`);
       return;
@@ -115,12 +93,11 @@ export default function PricingPlanSection() {
 
   const isCurrentPlan = (plan: Plan) => {
     if (!user) return false;
-    // If user's current plan is null and plan is free plan
-    if (!user.currentPlan && (plan.price === 0 || plan.price === "Free")) {
+    const planObj = user.currentPlan as { _id?: string } | string | null | undefined;
+    if (!planObj && (plan.price === 0 || plan.price === "Free")) {
       return true;
     }
-    // Check if matching ID
-    const userPlanId = typeof user.currentPlan === "object" ? user.currentPlan?._id : user.currentPlan;
+    const userPlanId = typeof planObj === "object" ? planObj?._id : planObj;
     return userPlanId === plan._id;
   };
 

@@ -5,17 +5,16 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useDecodedToken } from "@/hooks/useDecodedToken";
-import { useAppSelector } from "@/redux/hooks";
+import { useGetMeQuery } from "@/redux/api/authApi";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const token = useAppSelector((state) => state.auth.token);
-  const decodedToken = useDecodedToken(token);
-  const role = decodedToken?.role || "ADMIN";
+  const { data: profileData } = useGetMeQuery();
+  const user = profileData?.data as { role?: string } | undefined;
+  const role = user?.role || "ADMIN";
 
   return (
     <SidebarProvider>
