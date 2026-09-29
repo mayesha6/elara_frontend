@@ -48,10 +48,11 @@ export default function SuccessPage() {
             setErrorMessage(res?.message || "Stripe payment verification failed.");
           }
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (isMounted) {
+          const errorObj = err as { data?: { message?: string } };
           setVerifyStatus("error");
-          setErrorMessage(err?.data?.message || "Payment verification service error. Please contact support.");
+          setErrorMessage(errorObj?.data?.message || "Payment verification service error. Please contact support.");
         }
       }
     }
