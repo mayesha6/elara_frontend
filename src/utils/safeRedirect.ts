@@ -15,7 +15,7 @@ export function getSafeRedirectUrl(url: string | null | undefined, fallback: str
   // Allow approved absolute URLs on Greetely domains or localhost
   try {
     const parsed = new URL(trimmed);
-    const allowedDomains = ["greetely.com", "dashboard.greetely.com", "localhost", "127.0.0.1"];
+    const allowedDomains = ["greetely.com", "dashboard.greetely.com", "checkout.stripe.com", "localhost", "127.0.0.1"];
     const isAllowed = allowedDomains.some(domain => 
       parsed.hostname === domain || parsed.hostname.endsWith(`.${domain}`)
     );

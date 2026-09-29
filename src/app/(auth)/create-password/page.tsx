@@ -1,12 +1,5 @@
-import React from 'react';
-import CreatePasswordPage from '@/components/auth/CreatePasswordPage';
+import { redirect } from "next/navigation";
 
-const page = () => {
-    return (
-        <div>
-            <CreatePasswordPage />
-        </div>
-    );
-};
-
-export default page;
+export default function CreatePasswordRedirectPage() {
+  redirect("/forget-password");
+}

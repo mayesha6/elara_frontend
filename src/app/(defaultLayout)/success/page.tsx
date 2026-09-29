@@ -6,10 +6,12 @@ import { useVerifyPaymentSessionMutation } from "@/redux/api/subscriptionApi";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
+import { getValidStripeSessionId } from "@/utils/paymentVerification";
+
 export default function SuccessPage() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id") || searchParams.get("sessionId");
-  const paymentIntent = searchParams.get("payment_intent");
+  const rawSessionId = searchParams.get("session_id") || searchParams.get("sessionId");
+  const validSessionId = getValidStripeSessionId(rawSessionId);
 
   const [verifyStatus, setVerifyStatus] = useState<"verifying" | "success" | "error">("verifying");
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,38 +23,35 @@ export default function SuccessPage() {
     let isMounted = true;
 
     async function performVerification() {
-      try {
-        if (sessionId || paymentIntent) {
-          const res = await verifyPaymentSession({
-            sessionId: sessionId || undefined,
-            paymentIntent: paymentIntent || undefined,
-          }).unwrap();
+      if (!validSessionId) {
+        if (isMounted) {
+          setVerifyStatus("error");
+          setErrorMessage("Missing or invalid payment session ID. Payment could not be verified.");
+        }
+        return;
+      }
 
-          if (res?.success) {
-            if (isMounted) {
-              setVerifyStatus("success");
-              toast.success("Payment verified successfully!");
-              refetch();
-            }
-          } else {
-            if (isMounted) {
-              setVerifyStatus("error");
-              setErrorMessage(res?.message || "Stripe payment verification failed.");
-            }
-          }
-        } else {
-          // If no query params present, check profile state
+      try {
+        const res = await verifyPaymentSession({
+          sessionId: validSessionId,
+        }).unwrap();
+
+        if (res?.success) {
           if (isMounted) {
             setVerifyStatus("success");
+            toast.success("Payment verified successfully!");
             refetch();
           }
+        } else {
+          if (isMounted) {
+            setVerifyStatus("error");
+            setErrorMessage(res?.message || "Stripe payment verification failed.");
+          }
         }
-      } catch {
+      } catch (err: any) {
         if (isMounted) {
-          // Fallback: If backend endpoint is webhook-based, verify profile data refetch
-          setVerifyStatus("success");
-          toast.success("Thank you for your payment!");
-          refetch();
+          setVerifyStatus("error");
+          setErrorMessage(err?.data?.message || "Payment verification service error. Please contact support.");
         }
       }
     }
@@ -62,7 +61,7 @@ export default function SuccessPage() {
     return () => {
       isMounted = false;
     };
-  }, [sessionId, paymentIntent, verifyPaymentSession, refetch]);
+  }, [validSessionId, verifyPaymentSession, refetch]);
 
   if (verifyStatus === "verifying") {
     return (

@@ -22,6 +22,8 @@ interface Plan {
   stripePriceId?: string;
 }
 
+import { isStripeCheckoutUrl } from "@/utils/paymentVerification";
+
 export default function PricingPlanSection() {
   const router = useRouter();
 
@@ -57,10 +59,10 @@ export default function PricingPlanSection() {
       setSubscribingId(plan._id);
       const res = await createCheckoutSession({ planId: plan._id }).unwrap();
       const checkoutUrl = res?.checkoutUrl || res?.data?.checkoutUrl;
-      if (checkoutUrl) {
+      if (checkoutUrl && isStripeCheckoutUrl(checkoutUrl)) {
         window.location.href = checkoutUrl;
       } else {
-        toast.error("Failed to generate checkout session.");
+        toast.error("Invalid checkout URL received from server.");
       }
     } catch (err: unknown) {
       const errorObj = err as { data?: { message?: string }; message?: string };

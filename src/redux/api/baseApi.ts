@@ -20,7 +20,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
   if (
     result.error &&
-    (result.error.status === 401 || result.error.status === 403)
+    result.error.status === 401
   ) {
     const url = typeof args === "string" ? args : args.url;
     // Don't attempt to refresh token if the failed request was already the refresh endpoint

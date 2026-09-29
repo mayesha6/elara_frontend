@@ -23,6 +23,13 @@ import {
   useResetPasswordMutation,
 } from "@/redux/api/authApi";
 
+import {
+  passwordValidationSchema,
+  setMemoryResetToken,
+  getMemoryResetToken,
+  clearMemoryResetToken,
+} from "@/utils/authFlows";
+
 // ---------- Validation Schemas ----------
 const forgotPasswordSchema = z.object({
   email: z
@@ -40,10 +47,10 @@ const otpVerificationSchema = z.object({
 
 const resetPasswordSchema = z
   .object({
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: passwordValidationSchema,
     confirmPassword: z
       .string()
-      .min(6, "Confirm password must be at least 6 characters"),
+      .min(1, "Confirm password is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -163,6 +170,7 @@ export default function ForgetPasswordPage() {
     try {
       const normalizedEmail = data.email.trim().toLowerCase();
 
+      clearMemoryResetToken();
       setEmail(normalizedEmail);
       setOtpValues(["", "", "", "", "", ""]);
       otpForm.reset({ otp: "" });
@@ -188,16 +196,23 @@ export default function ForgetPasswordPage() {
   const handleOtpSubmit = async (data: OtpVerificationFormData) => {
     try {
       const cleanOtp = data.otp.trim();
+      clearMemoryResetToken();
 
-      await verifyOtp({
+      const res = await verifyOtp({
         email,
         otp: cleanOtp,
       }).unwrap();
+
+      const token = res?.data?.resetToken || res?.resetToken || res?.data?.token || res?.token;
+      if (token) {
+        setMemoryResetToken(token);
+      }
 
       setStep("password");
       toast.success("Code verified successfully");
     } catch (error: any) {
       console.error("Failed to verify OTP:", error);
+      clearMemoryResetToken();
 
       const message = error?.data?.message || "Invalid verification code";
 
@@ -218,12 +233,15 @@ export default function ForgetPasswordPage() {
 
   const handlePasswordSubmit = async (data: ResetPasswordFormData) => {
     try {
+      const resetToken = getMemoryResetToken();
       await resetPassword({
         email,
         newPassword: data.password,
         confirmPassword: data.confirmPassword,
+        ...(resetToken ? { token: resetToken, resetToken } : {}),
       }).unwrap();
 
+      clearMemoryResetToken();
       setStep("success");
       toast.success("Password reset successfully");
     } catch (error: any) {
@@ -234,6 +252,7 @@ export default function ForgetPasswordPage() {
 
   const handleResendOtp = async () => {
     try {
+      clearMemoryResetToken();
       await forgotPassword({ email }).unwrap();
       setOtpValues(["", "", "", "", "", ""]);
       otpForm.reset({ otp: "" });
