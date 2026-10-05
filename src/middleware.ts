@@ -6,9 +6,8 @@ export function middleware(request: NextRequest) {
 
   const token = request.cookies.get("accessToken")?.value;
 
-  // ✅ Public routes (always accessible)
   const publicRoutes = [
-    "/", // Home page
+    "/",
     "/login",
     "/forget-password",
     "/create-password",
@@ -27,7 +26,6 @@ export function middleware(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
-  // ✅ Allow static files & Next internals
   if (
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/favicon.ico") ||
@@ -36,28 +34,28 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ✅ Public pages accessible without token
-  if (isPublicRoute) {
-    return NextResponse.next();
-  }
+  let response: NextResponse;
 
   const isLoginPage = pathname === "/login";
 
-  // 🔒 No token
   if (!token) {
-    if (isLoginPage) {
-      return NextResponse.next();
+    if (isPublicRoute || isLoginPage) {
+      response = NextResponse.next();
+    } else {
+      response = NextResponse.redirect(new URL("/login", request.url));
     }
-
-    return NextResponse.redirect(new URL("/login", request.url));
+  } else if (token && isLoginPage) {
+    response = NextResponse.redirect(new URL("/", request.url));
+  } else {
+    response = NextResponse.next();
   }
 
-  // ✅ Has token → block login page
-  if (token && isLoginPage) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // Disable bfcache storing of auth state
+  response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  response.headers.set("Pragma", "no-cache");
+  response.headers.set("Expires", "0");
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

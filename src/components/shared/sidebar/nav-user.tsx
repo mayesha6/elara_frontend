@@ -39,9 +39,9 @@ export function NavUser() {
       await logoutUser().unwrap().catch(() => {});
       dispatch(logout());
       dispatch(baseApi.util.resetApiState());
-      window.location.href = "/login?redirect=" + encodeURIComponent(pathname);
+      window.location.replace("/login?redirect=" + encodeURIComponent(pathname));
     } catch {
-      window.location.href = "/login?redirect=" + encodeURIComponent(pathname);
+      window.location.replace("/login?redirect=" + encodeURIComponent(pathname));
     }
   };
 
