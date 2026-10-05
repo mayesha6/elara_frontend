@@ -99,7 +99,7 @@ export default function AppSidebar({ role, ...props }: AppSidebarProps) {
           className="flex items-center w-full max-h-40 justify-center"
         >
           <Image
-            src={GreetlyLogo.src}
+            src={GreetlyLogo}
             alt="Logo"
             width={300}
             height={300}
