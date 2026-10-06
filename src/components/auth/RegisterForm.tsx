@@ -311,6 +311,7 @@ import {
   useGetDepartmentQuery,
   useRegisterMutation,
 } from "@/redux/api/authApi";
+import { passwordValidationSchema } from "@/utils/authFlows";
 
 type SignupFormData = {
   fullName: string;
@@ -346,8 +347,8 @@ export default function RegisterForm() {
         department: z.string().optional(),
         companyName: z.string().optional(),
         phone: z.string().optional(),
-        password: z.string().min(6, "Password must be at least 6 characters"),
-        confirmPassword: z.string().min(6, "Confirm password is required"),
+        password: passwordValidationSchema,
+        confirmPassword: z.string().min(1, "Confirm password is required"),
       })
       .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords don't match",

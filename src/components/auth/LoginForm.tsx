@@ -32,7 +32,9 @@ import { getSafeRedirectUrl } from "@/utils/safeRedirect";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  // Login accepts any non-empty password; strength rules are enforced when
+  // passwords are created or changed.
+  password: z.string().min(1, "Password is required"),
   rememberMe: z.boolean().optional(),
 });
 

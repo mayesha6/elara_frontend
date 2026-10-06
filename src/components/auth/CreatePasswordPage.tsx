@@ -11,18 +11,13 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
+import { passwordValidationSchema } from "@/utils/authFlows";
 
 // Define the schema
 const forgotPasswordSchema = z
   .object({
     email: z.string().email("Please enter a valid email address").optional(),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-      ),
+    password: passwordValidationSchema,
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
