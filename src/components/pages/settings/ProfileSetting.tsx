@@ -65,6 +65,7 @@ import {
   useUserAccountDeleteMutation,
 } from "@/redux/api/authApi";
 import { useRouter } from "next/navigation";
+import { PASSWORD_REGEX } from "@/utils/authFlows";
 
 /* ─────────────────────────────────────────────
    Delete Confirmation Modal
@@ -531,10 +532,13 @@ export default function ProfileSettings() {
                           {...register("newPassword", {
                             validate: (value) => {
                               if (!value) return true;
-                              return (
-                                value.length >= 6 ||
-                                "Password must be at least 6 characters"
-                              );
+                              if (value.length < 8) {
+                                return "Password must be at least 8 characters long";
+                              }
+                              if (!PASSWORD_REGEX.test(value)) {
+                                return "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&#)";
+                              }
+                              return true;
                             },
                           })}
                           className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-primary"
