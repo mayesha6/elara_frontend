@@ -68,3 +68,5 @@ next-env.d.ts
 
 # Vercel
 .vercel
+
+api.js
