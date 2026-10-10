@@ -10,6 +10,9 @@ jobs:
   test-e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_URL: 'https://api.greetely.com/api/v1'
+      PLAYWRIGHT_TEST_BASE_URL: 'http://localhost:3041'
     steps:
       - uses: actions/checkout@v4
 
@@ -27,13 +30,9 @@ jobs:
 
       - name: Build Next.js Application
         run: npm run build
-        env:
-          NEXT_PUBLIC_BASE_URL: "https://api.greetely.com/api/v1"
 
       - name: Run Playwright Tests
         run: npx playwright test
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: 'http://localhost:3041'
 
       - name: Upload Playwright Report Artifact
         uses: actions/upload-artifact@v4
