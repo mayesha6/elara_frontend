@@ -70,3 +70,7 @@ next-env.d.ts
 .vercel
 
 api.js
+
+# Playwright
+playwright-report/
+test-results/

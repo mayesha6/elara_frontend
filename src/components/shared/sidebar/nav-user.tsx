@@ -24,6 +24,9 @@ import { baseApi } from "@/redux/api/baseApi";
 import { logout } from "@/redux/features/authSlice";
 import Image from "next/image";
 
+const placeholderSrc =
+  typeof placeholder === "string" ? placeholder : placeholder.src;
+
 export function NavUser() {
   const { isMobile } = useSidebar();
   const dispatch = useAppDispatch();
@@ -92,7 +95,7 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={typeof data?.image === "string" && data.image ? data.image : placeholder.src}
+                  src={typeof data?.image === "string" && data.image ? data.image : placeholderSrc}
                   alt={data?.firstName ?? "User"}
                   className="h-8 w-8 object-cover rounded-lg"
                 />
@@ -127,7 +130,7 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={typeof data?.image === "string" && data.image ? data.image : placeholder.src}
+                    src={typeof data?.image === "string" && data.image ? data.image : placeholderSrc}
                     alt={data?.firstName ?? "User"}
                     className="h-8 w-8 object-cover rounded-lg"
                   />

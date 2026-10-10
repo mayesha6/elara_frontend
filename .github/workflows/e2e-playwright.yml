@@ -1,0 +1,42 @@
+name: Playwright E2E Tests & CI Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop, staging ]
+  pull_request:
+    branches: [ main, master, develop, staging ]
+
+jobs:
+  test-e2e:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Build Next.js Application
+        run: npm run build
+
+      - name: Run Playwright Tests
+        run: npx playwright test
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: 'http://localhost:3041'
+
+      - name: Upload Playwright Report Artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

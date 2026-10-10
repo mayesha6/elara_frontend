@@ -42,3 +42,11 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_BASE_URL: "https://api.greetely.com/api/v1"
+
+      - name: Install Playwright Browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run End-to-End Tests
+        run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_BASE_URL: "http://127.0.0.1:3999/api/v1"
