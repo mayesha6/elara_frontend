@@ -27,6 +27,8 @@ jobs:
 
       - name: Build Next.js Application
         run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_URL: "https://api.greetely.com/api/v1"
 
       - name: Run Playwright Tests
         run: npx playwright test
