@@ -249,6 +249,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   useVerifyOtpMutation,
   useResendOtpMutation,
+  useRestoreAccountMutation,
+  useResendRestoreOtpMutation,
 } from "@/redux/api/authApi";
 import * as z from "zod";
 
@@ -271,8 +273,13 @@ export default function VerifyOTPPage() {
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
   const [countdown, setCountdown] = useState(120);
 
+  const mode = searchParams.get("mode");
+  const isRestore = mode === "restore";
+
   const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
   const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
+  const [restoreAccount, { isLoading: isRestoring }] = useRestoreAccountMutation();
+  const [resendRestoreOtp, { isLoading: isResendingRestore }] = useResendRestoreOtpMutation();
 
   const {
     handleSubmit,
@@ -358,17 +365,32 @@ export default function VerifyOTPPage() {
     }
 
     try {
-      const response = await verifyOtp({
-        email,
-        otp: Number(data.otp),
-      }).unwrap();
+      if (isRestore) {
+        const response = await restoreAccount({
+          email,
+          otp: Number(data.otp),
+        }).unwrap();
 
-      toast.success(response?.message || "OTP verified successfully!");
-      router.push("/login");
+        toast.success(
+          response?.message || "Account restored successfully! Please log in."
+        );
+        router.push("/login");
+      } else {
+        const response = await verifyOtp({
+          email,
+          otp: Number(data.otp),
+        }).unwrap();
+
+        toast.success(response?.message || "OTP verified successfully!");
+        router.push("/login");
+      }
     } catch (error: any) {
-      console.error("OTP verification error:", error);
+      console.error(isRestore ? "Account restoration error:" : "OTP verification error:", error);
       toast.error(
-        error?.data?.message || "Failed to verify OTP. Please try again.",
+        error?.data?.message ||
+          (isRestore
+            ? "Failed to restore account. Please try again."
+            : "Failed to verify OTP. Please try again.")
       );
     }
   };
@@ -380,8 +402,13 @@ export default function VerifyOTPPage() {
     }
 
     try {
-      const response = await resendOtp({ email }).unwrap();
-      toast.success(response?.message || "OTP resent successfully");
+      if (isRestore) {
+        const response = await resendRestoreOtp({ email }).unwrap();
+        toast.success(response?.message || "Restoration code resent successfully");
+      } else {
+        const response = await resendOtp({ email }).unwrap();
+        toast.success(response?.message || "OTP resent successfully");
+      }
       setCountdown(120);
       setOtpValues(["", "", "", "", "", ""]);
       setValue("otp", "");
@@ -389,7 +416,7 @@ export default function VerifyOTPPage() {
     } catch (error: any) {
       console.error("Resend OTP error:", error);
       toast.error(
-        error?.data?.message || "Failed to resend OTP. Please try again.",
+        error?.data?.message || "Failed to resend OTP. Please try again."
       );
     }
   };
@@ -425,12 +452,22 @@ export default function VerifyOTPPage() {
 
               <div className="text-center mb-8">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                  Enter Verification Code
+                  {isRestore ? "Restore Your Account" : "Enter Verification Code"}
                 </h1>
                 <p className="text-sm sm:text-base text-gray-500">
-                  We&apos;ve sent a verification code to{" "}
-                  <span className="font-medium text-gray-700">{email}</span>.
-                  Please enter the code below to verify your account.
+                  {isRestore ? (
+                    <>
+                      We&apos;ve sent an account restoration code to{" "}
+                      <span className="font-medium text-gray-700">{email}</span>.
+                      Please enter the 6-digit code below to restore and reactivate your account.
+                    </>
+                  ) : (
+                    <>
+                      We&apos;ve sent a verification code to{" "}
+                      <span className="font-medium text-gray-700">{email}</span>.
+                      Please enter the code below to verify your account.
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -468,19 +505,25 @@ export default function VerifyOTPPage() {
 
                 <button
                   type="submit"
-                  disabled={isVerifying}
+                  disabled={isVerifying || isRestoring}
                   className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200"
                 >
-                  {isVerifying ? "Verifying OTP..." : "Verify OTP"}
+                  {isRestore
+                    ? isRestoring
+                      ? "Restoring Account..."
+                      : "Restore Account"
+                    : isVerifying
+                      ? "Verifying OTP..."
+                      : "Verify OTP"}
                 </button>
 
                 <button
                   type="button"
                   onClick={handleResendOtp}
-                  disabled={isResending || countdown > 0}
+                  disabled={isResending || isResendingRestore || countdown > 0}
                   className="w-full border border-orange-500 text-orange-500 hover:bg-orange-50 disabled:opacity-50 font-semibold py-3 px-4 rounded-lg transition-all duration-200"
                 >
-                  {isResending
+                  {isResending || isResendingRestore
                     ? "Sending..."
                     : countdown > 0
                       ? `Resend in ${countdown}s`

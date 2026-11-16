@@ -286,6 +286,20 @@ export default function LoginForm() {
                 </div>
               )}
 
+              {errors.root?.message?.toLowerCase().includes("deleted") && (
+                <div className="text-sm text-amber-800 text-center bg-amber-50 border border-amber-200 py-3 px-3 rounded-md space-y-2">
+                  <p className="text-xs">
+                    This account is currently deleted. You can restore it anytime by registering again with this email address.
+                  </p>
+                  <Link
+                    href={`/register?email=${encodeURIComponent(userEmail || "")}`}
+                    className="inline-block text-xs font-medium text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-md transition"
+                  >
+                    Restore Account
+                  </Link>
+                </div>
+              )}
+
               {errors.root?.message?.includes("not verified") && (
                 <div className="text-sm text-red-500 text-center bg-red-50 py-3 px-3 rounded-md space-y-2">
                   <button

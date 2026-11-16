@@ -408,6 +408,18 @@ export default function RegisterForm() {
 
       const response = await registerUser(payload).unwrap();
 
+      if (response?.data?.requiresRestoration) {
+        toast.info(
+          response?.message ||
+            "Your account was previously deleted. A verification code has been sent to restore it.",
+          { duration: 5000 }
+        );
+        router.push(
+          `/otp-verify?email=${encodeURIComponent(data.email)}&mode=restore`
+        );
+        return;
+      }
+
       toast.success(
         response?.message ||
           "User Created Successfully. OTP sent to email. Please verify your account.",

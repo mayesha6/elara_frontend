@@ -100,6 +100,23 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
+    restoreAccount: builder.mutation({
+      query: (data) => ({
+        url: "/user/restore-account",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    resendRestoreOtp: builder.mutation({
+      query: (data) => ({
+        url: "/otp/resend-restore-otp",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
     getDepartment: builder.query<unknown, string | void | undefined>({
       query: () => "/department/public",
       providesTags: ["User"],
@@ -122,4 +139,6 @@ export const {
   useUserAccountDeleteMutation,
   useGetDepartmentQuery,
   useLogoutUserMutation,
+  useRestoreAccountMutation,
+  useResendRestoreOtpMutation,
 } = authApi;
