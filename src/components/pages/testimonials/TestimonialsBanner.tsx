@@ -38,7 +38,7 @@ export default function TestimonialsBanner() {
           {/* Description */}
           <p className="mx-auto mt-4 max-w-2xl text-sm text-[#6b7280] md:text-base">
             Discover how companies across industries are transforming their
-            workplace culture with Greetly&apos;s recognition and rewards platform.
+            workplace culture with Elara&apos;s recognition and rewards platform.
           </p>
 
           {/* Stats */}

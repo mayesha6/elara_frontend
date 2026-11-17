@@ -4,27 +4,27 @@ const comparisonRows = [
   {
     feature: "Message Generation",
     traditional: "Static templates",
-    greetely: "AI-powered message generation",
+    elara: "AI-powered message generation",
   },
   {
     feature: "Recognition System",
     traditional: "No structured rewards",
-    greetely: "Structured points system",
+    elara: "Structured points system",
   },
   {
     feature: "Analytics & Reporting",
     traditional: "No analytics",
-    greetely: "Full admin reporting",
+    elara: "Full admin reporting",
   },
   {
     feature: "Brand Alignment",
     traditional: "Limited brand alignment",
-    greetely: "Full brand customization",
+    elara: "Full brand customization",
   },
   {
     feature: "Company Values",
     traditional: "Generic messaging",
-    greetely: "Value-aligned recognition",
+    elara: "Value-aligned recognition",
   },
 ];
 
@@ -34,7 +34,7 @@ export default function ComparisonTableSection() {
       <div className="mx-auto max-w-5xl">
         <div className="text-center">
           <h2 className="text-xl md:text-3xl lg:text-4xl font-extrabold tracking-[-0.03em] text-[#123d63]">
-            Why Greetely Stands Apart
+            Why Elara Stands Apart
           </h2>
         </div>
 
@@ -50,7 +50,7 @@ export default function ComparisonTableSection() {
                     Traditional E-Cards
                   </th>
                   <th className="bg-[#e8edf9] px-6 py-5 text-left text-[18px] font-semibold text-[#ff6a1a]">
-                    Greetely
+                    Elara
                   </th>
                 </tr>
               </thead>
@@ -84,7 +84,7 @@ export default function ComparisonTableSection() {
                     >
                       <div className="flex items-center gap-2.5">
                         <Check className="h-4 w-4 shrink-0 text-[#22c55e]" strokeWidth={2.2} />
-                        <span>{row.greetely}</span>
+                        <span>{row.elara}</span>
                       </div>
                     </td>
                   </tr>

@@ -3,13 +3,13 @@
 import { Brain, Shield, Zap } from "lucide-react";
 import { FaCircleCheck } from "react-icons/fa6";
 
-export default function WhyChooseGreetely() {
+export default function WhyChooseElara() {
   const features = [
     {
       icon: Brain,
       title: "Advanced AI-Powered Recognition",
       description1:
-        "Writing meaningful recognition messages can sometimes feel difficult or time-consuming. Greetely uses advanced artificial intelligence to generate thoughtful and professional appreciation messages instantly.",
+        "Writing meaningful recognition messages can sometimes feel difficult or time-consuming. Elara uses advanced artificial intelligence to generate thoughtful and professional appreciation messages instantly.",
       description2:
         "Our AI understands workplace communication and helps employees express gratitude in a clear and meaningful way, ensuring every recognition message feels genuine and impactful.",
       points: [
@@ -25,7 +25,7 @@ export default function WhyChooseGreetely() {
       icon: Shield,
       title: "The Safest Recognition Platform",
       description1:
-        "Trust and privacy are essential when building a recognition culture. Greetely is designed with security and reliability at its core, ensuring that all recognition messages and employee interactions remain protected.",
+        "Trust and privacy are essential when building a recognition culture. Elara is designed with security and reliability at its core, ensuring that all recognition messages and employee interactions remain protected.",
       description2:
         "Our platform follows secure infrastructure practices so organizations can confidently encourage appreciation without worrying about data safety.",
       points: [
@@ -41,7 +41,7 @@ export default function WhyChooseGreetely() {
       icon: Zap,
       title: "The Fastest Recognition Program",
       description1:
-        "Great work deserves to be recognized immediately. Greetely simplifies the recognition process so employees can celebrate achievements in just a few clicks.",
+        "Great work deserves to be recognized immediately. Elara simplifies the recognition process so employees can celebrate achievements in just a few clicks.",
       description2:
         "With a streamlined workflow and intuitive interface, team members can send appreciation instantly, making recognition a natural part of everyday work.",
       points: [
@@ -62,10 +62,10 @@ export default function WhyChooseGreetely() {
         {/* Header */}
         <div className="text-center mb-14">
           <h2 className="text-xl md:text-3xl lg:text-4xl text-slate-800">
-            Why Teams Choose Greetely
+            Why Teams Choose Elara
           </h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto md:text-base text-sm leading-relaxed">
-            Greetely combines intelligent technology, speed, and security to
+            Elara combines intelligent technology, speed, and security to
             create a recognition platform that helps organizations celebrate
             achievements and build stronger workplace connections.
           </p>

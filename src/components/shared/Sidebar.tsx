@@ -1,7 +1,5 @@
 import Link from "next/link";
 import NavLink from "./NavLink";
-import Image from "next/image";
-import logo from "@/assets/logo.png";
 import { MdOutlineDashboard } from "react-icons/md";
 import { Button } from "../ui/button";
 
@@ -14,8 +12,9 @@ function Sidebar() {
     <div className="flex px-5 flex-col h-full bg-white">
       <div className="px-6 pb-6 pt-4">
         <Link href="/" className="flex items-center gap-2">
-          <Image height={1000} width={1000} src={logo} alt="Logo" className="h-full w-full" />
-          {/* <span className="font-semibold">Admin Panel</span> */}
+          <span className="text-2xl font-semibold text-[#1b98e0]">
+            Elara.
+          </span>
         </Link>
       </div>
       <nav className="flex justify-between h-full mb-10 flex-col">

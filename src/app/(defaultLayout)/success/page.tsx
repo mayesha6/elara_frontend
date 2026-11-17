@@ -100,7 +100,7 @@ export default function SuccessPage() {
           <div className="pt-4">
             <button
               onClick={() => {
-                let dashboardUrl = "https://dashboard.greetely.com";
+                let dashboardUrl = "https://dashboard.elara.com";
                 if (typeof window !== "undefined" && window.location.hostname.includes("localhost")) {
                   dashboardUrl = "http://localhost:3010";
                 }
@@ -135,7 +135,7 @@ export default function SuccessPage() {
         <div className="pt-4 space-y-3">
           <button
             onClick={() => {
-              let dashboardUrl = "https://dashboard.greetely.com";
+              let dashboardUrl = "https://dashboard.elara.com";
               if (typeof window !== "undefined") {
                 if (window.location.hostname.includes("localhost")) {
                   dashboardUrl = "http://localhost:3010";

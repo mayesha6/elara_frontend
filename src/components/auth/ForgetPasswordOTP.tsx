@@ -51,9 +51,9 @@ export default function ForgetPasswordOTP({ isOpen, email = 'user@gmail.com', on
 
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <div className="text-2xl font-bold">
-            <span className="text-orange-500">✓</span> Greetely
-          </div>
+          <span className="text-2xl font-semibold text-[#1b98e0]">
+            Elara.
+          </span>
         </div>
 
         {/* Title */}

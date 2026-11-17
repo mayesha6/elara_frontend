@@ -41,7 +41,7 @@ jobs:
       - name: Run Production Build
         run: npm run build
         env:
-          NEXT_PUBLIC_BASE_URL: "https://staging-api.greetely.com/api/v1"
+          NEXT_PUBLIC_BASE_URL: "https://staging-api.elara.com/api/v1"
 
       - name: Install Playwright Browser
         run: npx playwright install --with-deps chromium

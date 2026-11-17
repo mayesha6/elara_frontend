@@ -1,6 +1,5 @@
 "use client";
 
-import GreetlyLogo from "@/assets/greetely.png";
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +15,6 @@ import {
   User,
   Users,
 } from "lucide-react";
-import Image from "next/image";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import Link from "next/link";
@@ -96,15 +94,11 @@ export default function AppSidebar({ role, ...props }: AppSidebarProps) {
       <SidebarHeader>
         <Link
           href={"/"}
-          className="flex items-center w-full max-h-40 justify-center"
+          className="flex items-center w-full justify-center py-4"
         >
-          <Image
-            src={GreetlyLogo}
-            alt="Logo"
-            width={300}
-            height={300}
-            className="size-auto "
-          />
+          <span className="text-2xl font-semibold text-[#1b98e0]">
+            Elara.
+          </span>
         </Link>
       </SidebarHeader>
       <SidebarContent>

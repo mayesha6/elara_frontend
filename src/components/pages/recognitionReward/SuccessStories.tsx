@@ -12,7 +12,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Greetely has transformed how we celebrate achievements across our organization. Peer recognitions have boosted team morale immensely."',
+        '"Elara has transformed how we celebrate achievements across our organization. Peer recognitions have boosted team morale immensely."',
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"With Greetely, our department has seen a noticeable increase in employee engagement and team alignment."',
+        '"With Elara, our department has seen a noticeable increase in employee engagement and team alignment."',
     },
     {
       id: 4,
@@ -52,7 +52,7 @@ export default function SuccessStories() {
       image:
         "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
       quote:
-        '"Greetely makes every team member feel valued. It\'s the highlight of our daily workplace culture."',
+        '"Elara makes every team member feel valued. It\'s the highlight of our daily workplace culture."',
     },
     {
       id: 6,
@@ -61,7 +61,7 @@ export default function SuccessStories() {
       twitter: "https://twitter.com/darlener",
       image: "",
       quote:
-        '"Simple, engaging, and powerful. Greetely has made recognition an integral part of our company culture."',
+        '"Simple, engaging, and powerful. Elara has made recognition an integral part of our company culture."',
     },
   ];
 

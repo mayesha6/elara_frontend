@@ -12,7 +12,7 @@ export default function CustomerStories() {
             Watch Customer Stories
           </h2>
           <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4">
-            See how Greetely transformed these organizations
+            See how Elara transformed these organizations
           </p>
         </div>
 

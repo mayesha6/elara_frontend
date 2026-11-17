@@ -20,9 +20,9 @@ describe("Security & Customer Journey Validation", () => {
       assert.strictEqual(getSafeRedirectUrl("http://phishing-site.com"), "/");
     });
 
-    test("allows approved Greetely domains", () => {
-      assert.strictEqual(getSafeRedirectUrl("https://greetely.com/dashboard"), "https://greetely.com/dashboard");
-      assert.strictEqual(getSafeRedirectUrl("https://dashboard.greetely.com"), "https://dashboard.greetely.com");
+    test("allows approved Elara domains", () => {
+      assert.strictEqual(getSafeRedirectUrl("https://elara.com/dashboard"), "https://elara.com/dashboard");
+      assert.strictEqual(getSafeRedirectUrl("https://dashboard.elara.com"), "https://dashboard.elara.com");
     });
 
     test("falls back cleanly on empty or null values", () => {

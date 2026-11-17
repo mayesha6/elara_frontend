@@ -62,7 +62,7 @@ export default function WorkplaceRecognition() {
 
         {/* Bottom Text */}
         <p className="mt-12 text-orange-500 font-medium">
-          Greetely fixes all three — in under 60 seconds.
+          Elara fixes all three — in under 60 seconds.
         </p>
       </div>
     </section>

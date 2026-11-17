@@ -7,7 +7,7 @@ const features = [
   "Editable when needed",
 ];
 
-export default function GreetelyChatSection() {
+export default function ElaraChatSection() {
   return (
     <section className="w-full bg-[#f9fafb] py-24 px-6 lg:px-16">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
@@ -16,7 +16,7 @@ export default function GreetelyChatSection() {
         <div className="bg-white p-4 rounded-xl shadow-lg">
           <div className="bg-[#0F7587] w-[280px] sm:w-[320px] rounded-md p-6 text-white">
 
-            <h2 className="text-2xl font-bold mb-6">Greetely</h2>
+            <h2 className="text-2xl font-bold mb-6">Elara</h2>
 
             <div className="text-xs text-white/70">
               <p>To:</p>
@@ -56,7 +56,7 @@ export default function GreetelyChatSection() {
           </h1>
 
           <p className="mt-5 text-gray-600 leading-relaxed md:text-base text-sm">
-            Greetely&apos;s AI crafts workplace-ready messages aligned with tone,
+            Elara&apos;s AI crafts workplace-ready messages aligned with tone,
             values, and organizational standards — eliminating awkward wording
             and saving time.
           </p>

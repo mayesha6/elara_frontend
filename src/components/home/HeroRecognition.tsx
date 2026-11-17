@@ -17,7 +17,7 @@ export default function HeroRecognition() {
             <div className="relative w-[280px] sm:w-[340px] md:w-[400px] lg:w-[470px]">
               <Image
                 src={HeroImage}
-                alt="Greetely app preview"
+                alt="Elara app preview"
                 width={900}
                 height={1200}
                 priority

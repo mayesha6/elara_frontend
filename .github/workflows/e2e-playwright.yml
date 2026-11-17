@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BASE_URL: 'https://staging-api.greetely.com/api/v1'
+      NEXT_PUBLIC_BASE_URL: 'https://staging-api.elara.com/api/v1'
       PLAYWRIGHT_TEST_BASE_URL: 'http://localhost:3041'
     steps:
       - uses: actions/checkout@v4

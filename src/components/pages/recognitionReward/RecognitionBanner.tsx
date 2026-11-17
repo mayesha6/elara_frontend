@@ -200,7 +200,7 @@ const RecognitionBanner = () => {
       const dashboardBaseUrl =
         domain === "http://localhost:3041"
           ? "http://localhost:3010"
-          : "https://dashboard.greetely.com";
+          : "https://dashboard.elara.com";
 
       window.location.href = `${dashboardBaseUrl}/${prefix}`;
     } else {

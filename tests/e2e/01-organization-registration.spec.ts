@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Organization Registration Flow", () => {
   test("should load registration page successfully", async ({ page }) => {
     await page.goto("/register");
-    await expect(page).toHaveTitle(/Greetely|Register/i);
+    await expect(page).toHaveTitle(/Elara|Register/i);
   });
 
   test("should display registration form elements", async ({ page }) => {

@@ -65,7 +65,7 @@ export default function RecognitionBrandingSection() {
           >
             <div className="mx-auto flex h-[86px] max-w-[260px] items-center justify-center rounded-xl bg-white px-4 shadow-[inset_0_0_0_1px_rgba(226,232,240,0.8)]">
               <span className="text-4xl font-extrabold tracking-tight text-[#ff741f] sm:text-[46px]">
-                Greetely
+                Elara
               </span>
             </div>
           </Card>

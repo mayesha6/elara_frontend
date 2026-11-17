@@ -1,6 +1,6 @@
 /**
  * Sanitizes and validates redirect URLs to prevent Open Redirect vulnerabilities.
- * Only relative paths starting with '/' (and not '//') or approved Greetely domains are allowed.
+ * Only relative paths starting with '/' (and not '//') or approved Elara domains are allowed.
  */
 export function getSafeRedirectUrl(url: string | null | undefined, fallback: string = "/"): string {
   if (!url) return fallback;
@@ -12,10 +12,10 @@ export function getSafeRedirectUrl(url: string | null | undefined, fallback: str
     return trimmed;
   }
 
-  // Allow approved absolute URLs on Greetely domains or localhost
+  // Allow approved absolute URLs on Elara domains or localhost
   try {
     const parsed = new URL(trimmed);
-    const allowedDomains = ["greetely.com", "dashboard.greetely.com", "checkout.stripe.com", "localhost", "127.0.0.1"];
+    const allowedDomains = ["elara.com", "dashboard.elara.com", "checkout.stripe.com", "localhost", "127.0.0.1"];
     const isAllowed = allowedDomains.some(domain => 
       parsed.hostname === domain || parsed.hostname.endsWith(`.${domain}`)
     );

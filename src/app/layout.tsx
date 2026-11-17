@@ -10,9 +10,9 @@ const lexendDeca = Lexend_Deca({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 export const metadata: Metadata = {
-  title: "Greetely",
+  title: "Elara",
   icons: {
-    icon: "/greetely.png",
+    icon: "/elara.png",
   },
   description:
     "Employee recognition and rewards platform to boost morale and engagement.",

@@ -5,7 +5,7 @@
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { toast } from "sonner";
 // import RegisterImg from "@/assets/images/logimg.png";
-// import IconImg from "@/assets/greetely.png";
+// import IconImg from "@/assets/elara.png";
 // import Image from "next/image";
 // import { useState, useEffect } from "react";
 // import { useRouter, useSearchParams } from "next/navigation";
@@ -142,7 +142,7 @@
 //           <div className="relative w-full h-full min-h-screen">
 //             <Image
 //               src={RegisterImg}
-//               alt="Greetely Dashboard"
+//               alt="Elara Dashboard"
 //               fill
 //               className="object-cover"
 //               priority
@@ -156,7 +156,7 @@
 //               <div className="flex justify-center mb-6">
 //                 <Image
 //                   src={IconImg}
-//                   alt="Greetely Dashboard"
+//                   alt="Elara Dashboard"
 //                   width={500}
 //                   height={500}
 //                   className="w-36 h-16 object-contain"
@@ -242,8 +242,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import RegisterImg from "@/assets/images/logimg.png";
-import IconImg from "@/assets/greetely.png";
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -428,7 +428,7 @@ export default function VerifyOTPPage() {
           <div className="relative w-full h-full min-h-screen">
             <Image
               src={RegisterImg}
-              alt="Greetely Dashboard"
+              alt="Elara Dashboard"
               fill
               className="object-cover"
               priority
@@ -439,15 +439,13 @@ export default function VerifyOTPPage() {
         <div className="flex-1 flex items-center justify-center px-4 py-12 lg:px-8">
           <div className="w-full max-w-md border-2 border-cyan-400 rounded-2xl bg-white p-6 lg:p-8">
             <div className="w-full max-w-md">
+              {/* Logo */}
               <div className="flex justify-center mb-6">
-                <Image
-                  src={IconImg}
-                  alt="Greetely Dashboard"
-                  width={500}
-                  height={500}
-                  className="w-36 h-16 object-contain"
-                  priority
-                />
+                <Link href="/">
+                  <span className="text-3xl font-semibold text-[#1b98e0]">
+                    Elara.
+                  </span>
+                </Link>
               </div>
 
               <div className="text-center mb-8">

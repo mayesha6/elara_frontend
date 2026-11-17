@@ -22,7 +22,6 @@ const slugify = (text: string): string => {
     .replace(/-+$/, ""); // Trim - from end of text
 };
 import LoginImg from "@/assets/images/logimg.png";
-import IconImg from "@/assets/greetely.png";
 import Link from "next/link";
 
 import { useLoginMutation, useResendOtpMutation } from "@/redux/api/authApi";
@@ -122,7 +121,7 @@ export default function LoginForm() {
         const currentOrigin = typeof window !== "undefined" ? window.location.origin : "";
         const dashboardBaseUrl = currentOrigin.includes("localhost")
           ? "http://localhost:3010"
-          : "https://dashboard.greetely.com";
+          : "https://dashboard.elara.com";
 
         let dashboardPath = "/";
         if (role === "SUPER_ADMIN") {
@@ -178,7 +177,7 @@ export default function LoginForm() {
           <div className="relative w-full h-full min-h-screen">
             <Image
               src={LoginImg}
-              alt="Greetely Dashboard"
+              alt="Elara Dashboard"
               fill
               className="lg:object-contain xl:object-cover"
               priority
@@ -191,14 +190,11 @@ export default function LoginForm() {
           <div className="w-full max-w-md border-2 border-cyan-400 rounded-2xl bg-white p-6 sm:p-8 shadow-lg">
             {/* Logo */}
             <div className="flex justify-center mb-6">
-              <Image
-                src={IconImg}
-                alt="Greetely Dashboard"
-                width={500}
-                height={500}
-                className="w-36 h-16 object-contain"
-                priority
-              />
+              <Link href="/">
+                <span className="text-3xl font-semibold text-[#1b98e0]">
+                  Elara.
+                </span>
+              </Link>
             </div>
 
             {/* Heading */}

@@ -122,7 +122,7 @@ export default function Navbar() {
       prefix = "user/dashboard";
     }
 
-    let dashboardBaseUrl = "https://dashboard.greetely.com";
+    let dashboardBaseUrl = "https://dashboard.elara.com";
     if (domain === "http://localhost:3041") {
       dashboardBaseUrl = "http://localhost:3010";
     }
@@ -150,13 +150,9 @@ export default function Navbar() {
         <div className="container mx-auto h-18 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <Image
-              src="/greetely.png"
-              alt="Greetely Logo"
-              width={500}
-              height={500}
-              className="w-32 h-12 object-contain"
-            />
+            <span className="text-2xl font-semibold text-[#1b98e0]">
+              Elara.
+            </span>
           </Link>
 
           {/* Desktop Nav Links */}

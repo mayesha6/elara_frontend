@@ -7,8 +7,8 @@ test.describe("Password Recovery Workflow", () => {
 
     const emailInput = page.locator("input[type='email'], input[name='email']").first();
     await expect(emailInput).toBeVisible();
-    await emailInput.fill("test.user@greetely.com");
-    await expect(emailInput).toHaveValue("test.user@greetely.com");
+    await emailInput.fill("test.user@elara.com");
+    await expect(emailInput).toHaveValue("test.user@elara.com");
   });
 
   test("should handle reset request button submission", async ({ page }) => {

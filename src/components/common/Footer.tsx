@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.55fr_0.55fr_0.55fr_0.9fr] lg:gap-10">
           <div className="max-w-xl">
             <h2 className="md:text-[56px] text-3xl font-extrabold leading-none tracking-[-0.03em] sm:text-[68px]">
-              Greetely
+              Elara
             </h2>
 
             <p className="mt-5 max-w-[560px] text-lg leading-8 text-white/95 sm:text-[15px] sm:leading-8 lg:text-[15px]">
@@ -45,7 +45,7 @@ export default function Footer() {
                 href="/login"
                 className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-medium text-[#ff741d] shadow-sm transition hover:translate-y-[-1px]"
               >
-                Sign in to Greetely
+                Sign in to Elara
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
@@ -123,7 +123,7 @@ export default function Footer() {
 
       <div className="mt-9 border-t border-white/25">
         <div className="mx-auto flex max-w-[1180px] flex-col gap-4 px-5 py-5 text-sm text-white/95 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-          <p>© 2026 Greetely. All rights reserved.</p>
+          <p>© 2026 Elara. All rights reserved.</p>
 
           <div className="flex items-center gap-4">
             <a

@@ -11,7 +11,7 @@ export default function ModernWorkSection() {
             Built for Modern Work — Anywhere
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#5f6770] sm:text-[15px]">
-            Fully optimized for mobile and desktop, Greetely enables
+            Fully optimized for mobile and desktop, Elara enables
             professionals to recognize teammates on the go or at their
             workstation — in just a few taps.
           </p>

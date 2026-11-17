@@ -27,15 +27,12 @@ yarn-error.log*
 logs/
 
 # local environment files
-.env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
 !.env.example
 
 # IDE / Editor files
-.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -74,3 +71,4 @@ api.js
 # Playwright
 playwright-report/
 test-results/
+config.bat

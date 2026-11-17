@@ -68,7 +68,7 @@ export default function AdminControlsSection() {
 
             <div className="mx-auto flex h-8 w-full max-w-[420px] items-center rounded-md bg-white px-3 shadow-sm">
               <span className="truncate text-xs text-gray-400">
-                greetely.com/admin/dashboard
+                elara.com/admin/dashboard
               </span>
             </div>
 

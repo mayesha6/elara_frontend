@@ -1,6 +1,6 @@
 import AdminControlsSection from "@/components/home/AdminControlsSection";
 import ComparisonTableSection from "@/components/home/ComparisonTableSection";
-import GreetelyChatSection from "@/components/home/GreetelyChatSection";
+import ElaraChatSection from "@/components/home/ElaraChatSection";
 import HeroRecognition from "@/components/home/HeroRecognition";
 import HeroSection from "@/components/home/HeroSection";
 import HowItWorks from "@/components/home/HowItWorks";
@@ -11,7 +11,7 @@ import RecognitionHeroSection from "@/components/home/RecognitionHeroSection";
 import RecognitionImpactSection from "@/components/home/RecognitionImpactSection";
 import RewardsSection from "@/components/home/RewardsSection";
 import TestimonialsGridSection from "@/components/home/TestimonialsSection";
-import WhyChooseGreetely from "@/components/home/WhyChooseGreetely";
+import WhyChooseElara from "@/components/home/WhyChooseElara";
 import WorkplaceRecognition from "@/components/home/WorkplaceRecognition";
 
 const HomePage = () => {
@@ -20,10 +20,10 @@ const HomePage = () => {
       <HeroSection />
       <MarqueeSection />
       <WorkplaceRecognition />
-      <WhyChooseGreetely />
+      <WhyChooseElara />
       <RewardsSection />
       <HowItWorks />
-      <GreetelyChatSection />
+      <ElaraChatSection />
       <RecognitionImpactSection />
       <AdminControlsSection />
       <RecognitionBrandingSection />

@@ -9,7 +9,7 @@
 // import { toast } from "sonner";
 // import Image from "next/image";
 // import RegisterImg from "@/assets/images/logimg.png";
-// import IconImg from "@/assets/greetely.png";
+// import IconImg from "@/assets/elara.png";
 // import Link from "next/link";
 // import { useRouter } from "next/navigation";
 // import { useSearchParams } from "next/navigation";
@@ -109,7 +109,7 @@
 //           <div className="relative w-full h-full min-h-screen">
 //             <Image
 //               src={RegisterImg}
-//               alt="Greetely Dashboard"
+//               alt="Elara Dashboard"
 //               fill
 //               className="lg:object-contain xl:object-cover"
 //               priority
@@ -124,7 +124,7 @@
 //             <div className="flex justify-center mb-6">
 //               <Image
 //                 src={IconImg}
-//                 alt="Greetely Dashboard"
+//                 alt="Elara Dashboard"
 //                 width={500}
 //                 height={500}
 //                 className="w-36 h-16 object-contain"
@@ -303,7 +303,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import RegisterImg from "@/assets/images/logimg.png";
-import IconImg from "@/assets/greetely.png";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -456,7 +455,7 @@ export default function RegisterForm() {
           <div className="relative w-full h-full min-h-screen">
             <Image
               src={RegisterImg}
-              alt="Greetely Dashboard"
+              alt="Elara Dashboard"
               fill
               className="lg:object-contain xl:object-cover"
               priority
@@ -469,14 +468,11 @@ export default function RegisterForm() {
           <div className="w-full max-w-md border-2 border-cyan-400 rounded-2xl bg-white p-6 sm:p-8 shadow-lg">
             {/* Logo */}
             <div className="flex justify-center mb-6">
-              <Image
-                src={IconImg}
-                alt="Greetely Dashboard"
-                width={500}
-                height={500}
-                className="w-36 h-16 object-contain"
-                priority
-              />
+              <Link href="/">
+                <span className="text-3xl font-semibold text-[#1b98e0]">
+                  Elara.
+                </span>
+              </Link>
             </div>
 
             {/* Heading */}

@@ -1,6 +1,6 @@
-# Greetely Frontend
+# Elara Frontend
 
-An employee recognition, rewards, and engagement web application for **Greetely**. Built with modern React 19, Next.js 15 (App Router), Redux Toolkit, and Tailwind CSS.
+An employee recognition, rewards, and engagement web application for **Elara**. Built with modern React 19, Next.js 15 (App Router), Redux Toolkit, and Tailwind CSS.
 
 ---
 
@@ -55,9 +55,9 @@ cp .env.example .env
 | Variable Name | Description | Example / Default Value |
 | :--- | :--- | :--- |
 | `NODE_ENV` | Application execution environment (`development`, `production`, `test`) | `development` |
-| `NEXT_PUBLIC_BASE_URL` | Backend REST API base URL | `https://api.greetely.com/api/v1` |
-| `NEXTAUTH_URL` | Dashboard base URL for role-based redirects | `https://dashboard.greetely.com` |
-| `NEXT_PUBLIC_SITE_URL` | Main Greetely public website URL | `https://greetely.com` |
+| `NEXT_PUBLIC_BASE_URL` | Backend REST API base URL | `https://api.elara.com/api/v1` |
+| `NEXTAUTH_URL` | Dashboard base URL for role-based redirects | `https://dashboard.elara.com` |
+| `NEXT_PUBLIC_SITE_URL` | Main Elara public website URL | `https://elara.com` |
 
 > ⚠️ **Security Note:** Never commit actual `.env` files with secret keys to version control. `.env.local` and `.env.production.local` are ignored in `.gitignore`.
 
@@ -128,7 +128,7 @@ Starts the Next.js production server on port `3041`.
 1. Clone the repository on the server:
    ```bash
    git clone <repository-url>
-   cd greetely-frontend
+   cd elara-frontend
    ```
 2. Install production dependencies:
    ```bash
@@ -140,7 +140,7 @@ Starts the Next.js production server on port `3041`.
    ```
 4. Start with PM2:
    ```bash
-   pm2 start npm --name "greetely-frontend" -- run start
+   pm2 start npm --name "elara-frontend" -- run start
    pm2 save
    ```
 
@@ -172,7 +172,7 @@ In case an issue is identified in a new production release, follow this simple r
    ```
 4. Restart PM2 process:
    ```bash
-   pm2 restart greetely-frontend
+   pm2 restart elara-frontend
    ```
 
 ---
@@ -188,4 +188,4 @@ In case an issue is identified in a new production release, follow this simple r
 
 ## 📄 License
 
-Private & Confidential - Greetely. All rights reserved.
+Private & Confidential - Elara. All rights reserved.

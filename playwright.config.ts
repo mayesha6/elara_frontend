@@ -18,7 +18,7 @@ export default defineConfig({
     reuseExistingServer: true,
     timeout: 120000,
     env: {
-      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL || "https://staging-api.greetely.com/api/v1",
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL || "https://staging-api.elara.com/api/v1",
     },
   },
   projects: [

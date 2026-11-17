@@ -1,11 +1,11 @@
 {
-  "name": "greetely",
+  "name": "elara",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 3041",
-    "build": "next build",
-    "start": "next start -p 3041",
+    "dev": "node init && next dev --turbopack -p 3041",
+    "build": "node init && next build",
+    "start": "node init && next start -p 3041",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "tsx --test src/__tests__/*.ts",

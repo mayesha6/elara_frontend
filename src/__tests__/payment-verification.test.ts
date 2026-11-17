@@ -43,7 +43,7 @@ describe("Payment Verification & Stripe Security Helpers", () => {
     });
 
     test("allows approved domains and fallbacks for unsafe domains", () => {
-      assert.strictEqual(getSafeRedirectUrl("https://greetely.com/page"), "https://greetely.com/page");
+      assert.strictEqual(getSafeRedirectUrl("https://elara.com/page"), "https://elara.com/page");
       assert.strictEqual(getSafeRedirectUrl("https://checkout.stripe.com/pay"), "https://checkout.stripe.com/pay");
       assert.strictEqual(getSafeRedirectUrl("https://attacker.com"), "/");
     });

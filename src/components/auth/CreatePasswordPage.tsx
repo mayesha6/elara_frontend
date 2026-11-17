@@ -6,8 +6,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 import RegisterImg from "@/assets/images/logimg.png";
-import IconImg from "@/assets/greetely.png";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
@@ -82,7 +82,7 @@ export default function CreatePasswordPage() {
           <div className="relative w-full h-full min-h-screen">
             <Image
               src={RegisterImg}
-              alt="Greetely Dashboard"
+              alt="Elara Dashboard"
               fill
               className="object-cover"
               priority
@@ -96,14 +96,11 @@ export default function CreatePasswordPage() {
             <div className="w-full max-w-md">
               {/* Logo */}
               <div className="flex justify-center mb-6">
-                <Image
-                  src={IconImg}
-                  alt="Greetely Dashboard"
-                  width={500}
-                  height={500}
-                  className="w-36 h-16 object-contain"
-                  priority
-                />
+                <Link href="/">
+                  <span className="text-3xl font-semibold text-[#1b98e0]">
+                    Elara.
+                  </span>
+                </Link>
               </div>
 
               {/* Heading */}

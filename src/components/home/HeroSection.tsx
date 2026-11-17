@@ -52,7 +52,7 @@ const HeroSection = () => {
       const dashboardBaseUrl =
         domain === "http://localhost:3041"
           ? "http://localhost:3010"
-          : "https://dashboard.greetely.com";
+          : "https://dashboard.elara.com";
 
       window.location.href = `${dashboardBaseUrl}/${prefix}`;
     }
@@ -106,7 +106,7 @@ const HeroSection = () => {
                   href={"/login"}
                   className="w-full lg:w-auto flex items-center justify-center gap-2 border border-primary text-primary hover:bg-[#fff4ee] active:scale-95 font-semibold text-sm px-6 py-4 rounded-lg transition-all duration-200 bg-white shadow-sm"
                 >
-                  Sign in to Greetely
+                  Sign in to Elara
                   <ArrowUpRight size={16} strokeWidth={2.5} />
                 </Link>
               </>
@@ -128,7 +128,7 @@ const HeroSection = () => {
         <div className="flex-1 flex justify-center md:justify-end">
           <Image
             src={heroImg}
-            alt="Greetely app preview on laptop and mobile"
+            alt="Elara app preview on laptop and mobile"
             className="w-full max-w-[480px] md:max-w-[560px] lg:max-w-[660px] object-contain drop-shadow-xl"
             priority
           />

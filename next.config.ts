@@ -22,15 +22,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "greetely-images.s3.us-east-2.amazonaws.com",
+        hostname: "elara-images.s3.us-east-2.amazonaws.com",
+      },
+      {
+        protocol: "https",
+        hostname: "elara-dev-images.s3.us-east-1.amazonaws.com",
       },
       {
         protocol: "https",
         hostname: "getyourwatch-assets-prod.s3.eu-north-1.amazonaws.com",
-      },
-      {
-        protocol: "https",
-        hostname: "greetely-dev-images.s3.us-east-1.amazonaws.com",
       },
       {
         protocol: "https",
